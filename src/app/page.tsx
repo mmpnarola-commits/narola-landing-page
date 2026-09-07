@@ -1,4 +1,9 @@
 import { Header } from "@/components/layout/Header";
+import { Hero } from "@/components/sections/Hero";
+import { CoreServices } from "@/components/sections/CoreServices";
+import { OtherServices } from "@/components/sections/OtherServices";
+import { Technologies } from "@/components/sections/Technologies";
+import { Industries } from "@/components/sections/Industries";
 import { CeoMessage } from "@/components/sections/CeoMessage";
 import { Footer } from "@/components/layout/Footer";
 
@@ -7,18 +12,26 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
-        <div className="flex flex-col items-center justify-center px-8 py-20 text-center">
-          <h1 className="text-2xl font-semibold text-ink">Narola Infotech — Landing Page</h1>
-          <p className="mt-2 text-sm text-slate">
-            Project initialized. Core sections in development.
-          </p>
-        </div>
+        {/* T008: Hero Section */}
+        <Hero />
 
-        {/* CEO Message Section above the footer */}
+        {/* T009: Core Services Section (Transformation Intro + 4 Core Categories) */}
+        <CoreServices />
+
+        {/* T010: Other Services Section (6 Complementary Capabilities) */}
+        <OtherServices />
+
+        {/* T011: Technologies & Platforms Section */}
+        <Technologies />
+
+        {/* T012: Industries Section */}
+        <Industries />
+
+        {/* CEO Message Section */}
         <CeoMessage />
       </main>
 
-      {/* Footer */}
+      {/* Site Footer */}
       <Footer />
     </div>
   );
