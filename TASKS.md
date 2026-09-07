@@ -24,18 +24,19 @@ nvm) because Next.js 14/15/16 all require a newer Node minimum than was installe
 project structured, traceable, and easy to maintain throughout AI-assisted development.
 **Notes:** No landing-page UI is implemented in this task.
 
-### T027 — Create base folder structure
+### T028 — Implement global typography & base styling
 
 **Status:** Completed
-**Description:** Create the base `src/` and `public/` folder/file structure (components/
-layout, sections, ui; content data modules; lib; public/images subfolders; `sitemap.ts` and
-`robots.ts`) so later tasks have a clean, predictable architecture to build into.
-**Notes:** Added out of numeric sequence — this task was requested and completed after T003
-but does not correspond to the "T004" originally planned below ("Finalize visual
-direction"). Assigned the next unused ID rather than renumbering T004–T026, to keep existing
-task IDs stable for future reference. No UI components (Header/Footer/Hero/section
-components) or content data were implemented — only typed, empty scaffolding. See
-[AI_WORK_LOG.md](AI_WORK_LOG.md) for full detail.
+**Description:** Implement the global typography and base-styling foundation defined by
+[VISUAL_DIRECTION.md](VISUAL_DIRECTION.md): Inter font setup, Tailwind v4 `@theme` brand
+color and typography-scale tokens, global base styles (body background/text/font), link/
+focus defaults, and `prefers-reduced-motion` support.
+**Notes:** Added out of numeric sequence, same as the earlier base-folder-structure task —
+this does not correspond to the "T005" defined below ("Finalize content mapping"). Assigned
+the next unused ID rather than renumbering T005–T026, per the human's standing instruction
+to keep existing task IDs stable. No Header/Hero/section/footer components were built — only
+global CSS (`src/app/globals.css`) and the root layout's font import
+(`src/app/layout.tsx`) were changed. See [AI_WORK_LOG.md](AI_WORK_LOG.md) for full detail.
 
 ---
 
@@ -54,21 +55,41 @@ landing-page-specific recommendations feeding into T004–T013.
 
 ### T004 — Finalize visual direction
 
-**Status:** Not Started
+**Status:** Completed
 **Description:** Confirm final color tokens, typography scale, spacing system, and component
 styling approach (Tailwind theme configuration) based on the brand analysis.
+**Notes:** Full design system documented in [VISUAL_DIRECTION.md](VISUAL_DIRECTION.md),
+covering brand colors (with computed WCAG contrast ratios resolving the T003 button-contrast
+issue), typography, layout/spacing, header/hero direction, section design language, cards/
+buttons/icons, responsive behavior, accessibility, and performance principles. No components
+were implemented and no code files were changed — documentation only.
 
 ### T005 — Finalize content mapping
 
-**Status:** Not Started
+**Status:** Completed
 **Description:** Confirm the final copy/content for each landing-page section, sourced from
 the production site or supplied by the user. No invented statistics, claims, or testimonials.
+**Notes:** Populated `src/content/{navigation,siteConfig,services,technologies,industries}.ts`
+and added `src/content/{hero,transformationIntro,footer}.ts`, all sourced from
+[PRODUCTION_SITE_ANALYSIS.md](PRODUCTION_SITE_ANALYSIS.md)'s retained/factual content only —
+prose paraphrased rather than copied verbatim, no flagged statistics/clients/testimonials
+carried over. One open item: the primary CTA's final destination (currently a placeholder
+anchor to the footer) — see [AI_WORK_LOG.md](AI_WORK_LOG.md). Technology sub-categories with
+no confirmed tool names (Database, DevOps and Cloud, Project Management) were intentionally
+left out rather than guessed. No components were built or modified — content files only.
 
 ### T006 — Finalize assets
 
-**Status:** Not Started
+**Status:** Completed
 **Description:** Confirm and source final image/logo/icon assets (with confirmed rights to
 use), including the Narola Infotech logo, hero imagery, and technology/industry icons.
+**Notes:** Logo downloaded from the production site (the company's own brand mark — human
+confirmed this explicitly); hero uses a hand-authored abstract brand-color SVG graphic, not
+photography; 12 industry icons hand-authored as generic (non-trademarked) line icons.
+Technology icons were deliberately **not** created as image assets — see
+[AI_WORK_LOG.md](AI_WORK_LOG.md) for the reasoning; the Technologies section (T011) should
+render technology names as text badges instead. All content files wired to reference the
+new asset paths. See [CHANGELOG.md](CHANGELOG.md) for the full file list.
 
 ---
 

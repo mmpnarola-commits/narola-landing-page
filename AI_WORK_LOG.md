@@ -297,135 +297,569 @@ site being touched.
 
 ---
 
-## T027 — Create base folder structure
+## T004 — Finalize visual direction
 
 **Date:** 2026-09-07
 
-**Objective:** Create the base `src/` and `public/` folder/file structure for the landing
-page so that later tasks (component, content, and asset implementation) have a clean,
-predictable architecture to build into — without implementing any UI, content, or adding
-dependencies.
+**Objective:** Document a finalized visual direction/design system for the landing page —
+brand colors, typography, layout, header/hero direction, section design language, reusable
+UI rules, imagery/icon guidelines, responsive behavior, accessibility, and performance
+principles — as a pure documentation task with zero component implementation or code
+changes.
 
-**Human instructions (summary):** Read CLAUDE.md/TASKS.md first; confirm T003 complete; use
-PRODUCTION_SITE_ANALYSIS.md as reference only; do not redo T001–T003; do not start T005+.
-Create a specific target folder structure (`components/{layout,sections,ui}`,
-`content/{navigation,siteConfig,services,technologies,industries}.ts`, `lib/`,
-`public/images/{hero,logo,tech-icons}`, `app/sitemap.ts`, `app/robots.ts`), inspecting for
-existing files first, not duplicating anything, not implementing Header/Footer/Hero/section
-components or their content, and using a minimal (not placeholder-code) approach for folders
-with no files yet. Validate with type-check/lint/build, update documentation, show a full
-summary before any commit, and prepare (but do not push) a commit titled
-"chore: create base project structure" if the implementation is clean.
+**Human instructions (summary):** Read CLAUDE.md/TASKS.md/PRODUCTION_SITE_ANALYSIS.md first;
+confirm T003 complete; do not redo T001–T003; do not start T005+; do not implement any
+landing-page component (including Hero, despite documenting hero direction in detail).
+Cover 12 specific areas (brand identity, typography, layout, header, hero, section design
+language, cards/UI, imagery/icons, responsive direction, accessibility, performance,
+content/design principles) in a new `VISUAL_DIRECTION.md`, using the confirmed brand palette
+from T003 without inventing new brand colors (only documenting additional neutral/supporting
+UI shades where justified). Explicitly resolve the T003-identified primary-blue/white-text
+contrast issue. Update TASKS.md/CHANGELOG.md/AI_WORK_LOG.md; show a full summary before any
+commit; do not push.
 
 **Claude work performed:**
-1. Read CLAUDE.md and TASKS.md in full; confirmed via `git log`/`git status` that T003 had
-   already been committed (`2190169`) since the prior session.
-2. **Identified a task-ID mismatch**: TASKS.md's actual T004 is "Finalize visual direction,"
-   not "Create Base Folder Structure" (the same class of mismatch encountered once before
-   with a proposed "T003 — Configure ESLint + Prettier"). Rather than pause for another
-   clarifying question — the prior occurrence had already established the human's general
-   preference and repeating that friction seemed low-value — made an explicit, disclosed
-   judgment call: assigned this task the next unused ID, **T027**, placed under "Project
-   Foundation" in TASKS.md, and left T004–T026 completely untouched rather than renumbering.
-   Reasoning recorded in TASKS.md and surfaced to the human in the chat summary: renumbering
-   would invalidate any future reference to existing IDs (e.g. "T007 — Header") and would
-   need repeating every time a new out-of-band task is inserted, whereas stable IDs plus a
-   clear note is more consistent with a "traceable" project.
-3. Inspected the existing `src/` and `public/` trees before creating anything — confirmed
-   `src/app/{favicon.ico,globals.css,layout.tsx,page.tsx}` were the only existing files, and
-   `public/` was empty. No existing files needed to be moved.
-4. Created empty directories `src/components/{layout,sections,ui}/`, `src/lib/`, and
-   `public/images/{hero,logo,tech-icons}/`, each marked with a `.gitkeep` file (a
-   zero-byte convention marker, not code) since git cannot track empty directories and the
-   instructions explicitly called for "an appropriate minimal approach" rather than
-   placeholder code.
-5. Created `src/content/siteConfig.ts`, `navigation.ts`, `services.ts`, `technologies.ts`,
-   and `industries.ts` — each with TypeScript interface/type definitions matching the shapes
-   implied by PRODUCTION_SITE_ANALYSIS.md, and empty (`services.ts`/`technologies.ts`/
-   `industries.ts`/`navigation.ts`) or minimally-factual (`siteConfig.ts`: company name,
-   generic description, placeholder URL) exports — deliberately not populating real
-   service/technology/industry copy, since that is T005's job and inventing it now would
-   violate the project's "no content ahead of its task" and "no invented claims" rules.
-6. Created `src/app/sitemap.ts` and `src/app/robots.ts` as functional Next.js metadata
-   routes (not placeholders — they build and serve correctly), using
-   `siteConfig.url` (which defaults to the RFC-2606 placeholder domain `https://example.com`
-   via `NEXT_PUBLIC_SITE_URL`) rather than guessing at a real subdomain, since the subdomain
-   is an explicitly open question (TASKS.md T023/T024).
-7. **Deliberately deviated from the literal target tree on one point**: did not move
-   `favicon.ico` from `src/app/` into `public/`. `src/app/favicon.ico` is the current,
-   correct Next.js App Router convention (auto-generates the favicon `<link>` tag) already
-   in place since T001; moving it to `public/` would be a regression with no benefit and
-   would conflict with "preserve the existing Next.js scaffold files" / "do not make
-   unrelated refactors." Flagged this explicitly rather than silently complying with the
-   literal tree.
-8. Did not create any component `.tsx` files (Header, Footer, Hero, section components, or
-   `ui/` primitives like Button/Card) — per instructions, these are deferred to their
-   respective later tasks (T007–T013) and were not "implemented" even as placeholders.
-9. Ran `npx tsc --noEmit` (clean), `npm run lint` (clean), and `npm run build` (succeeded;
-   confirmed `/robots.txt` and `/sitemap.xml` now generate as static routes alongside `/`).
-10. Updated `TASKS.md` (new T027 entry), `CHANGELOG.md` (new entry), and this file.
-11. Did not add any dependencies, did not touch the production website, and did not commit
-    or push any changes — left staged for human review per instructions.
+1. Read CLAUDE.md and TASKS.md in full; confirmed T003 was completed and T004
+   ("Finalize visual direction") was the correct next task per the existing plan — no ID
+   mismatch this time.
+2. Read `PRODUCTION_SITE_ANALYSIS.md` in full as the design reference.
+3. Inspected the current technical foundation before writing any direction that would need
+   to align with it: `src/app/globals.css` (Tailwind v4 CSS-first `@theme` block, currently
+   still the default Geist/dark-mode template from T001), `layout.tsx` (still importing
+   Geist, not yet Inter), `package.json` (confirmed no UI/animation libraries present, none
+   should be added), and the full `src/`/`public/` tree from the earlier base-structure
+   work (the folder scaffolding whose documentation entries were later reverted per the
+   human's request, while its files were explicitly kept — see the note on T028 below).
+4. **Computed WCAG 2.1 contrast ratios by hand** for every brand color pairing actually
+   relevant to the design system, not just the one pairing already computed in T003:
+   - Dark Ink on white ≈15.2:1, Slate on white ≈7.1:1 (confirms T003's figure).
+   - Brand Blue (`#0084FF`) on/against white ≈3.65:1 — confirmed T003's finding, and further
+     established that this failure applies to *any* use of Brand Blue as text on a light
+     background (e.g. links), not just button backgrounds as T003 had focused on.
+   - Tested a darker candidate, `#0072D9` ("Interactive Blue"), computing ≈4.76:1 — passes
+     AA — and adopted it as the fix, applying it uniformly to both button backgrounds and
+     link text for consistency, rather than solving only the button case.
+   - Computed Accent Orange (`#E9852A`) as text on white ≈2.67:1 — discovered this **fails
+     even the 3:1 large-text/UI minimum**, a finding not previously flagged in T003 (which
+     only listed orange as a "highlight accent" without checking its text-contrast safety).
+     Also computed Dark Ink on an Orange background ≈5.69:1 (passes), establishing that
+     orange is safe as a background fill under dark text but never as text itself.
+5. Authored `VISUAL_DIRECTION.md` covering all 12 requested areas plus the "at minimum
+   include" list (design goals, brand colors, typography, spacing/layout, container/grid,
+   header, hero, section design, cards, buttons, icons/images, responsive behavior,
+   accessibility, performance, and explicit "inherited vs. changed" summaries), embedding
+   the computed contrast table directly rather than restating T003's numbers uninspected.
+6. For every decision, explicitly labeled it as inherited from the production site or
+   intentionally changed, and cross-referenced the specific T003 finding it responds to
+   where applicable (e.g., button contrast, missing `<main>`/skip-link, no lazy-loading,
+   inconsistent heading hierarchy, Bootstrap breakpoints).
+7. Deliberately did **not** modify any code file — not `globals.css` (even though it will
+   eventually need the new color tokens and the Geist→Inter font swap), not `layout.tsx`,
+   not any component. Documented the intended Tailwind v4 `@theme` token mapping as
+   implementation guidance for whichever future task performs that change, per the explicit
+   instruction to keep T004 documentation-only.
+8. Did not select final hero imagery, service copy, or any other content — kept content
+   decisions (§13 of the document) explicitly deferred to T005, per instructions.
+9. Updated `TASKS.md` (T004 → Completed, with a pointer to the new document), `CHANGELOG.md`
+   (new entry), and this file.
+10. Ran `git status` to confirm only T004-related files changed. Did not run
+    `npm run build`/`lint`/`tsc` since no code file was modified (per the instruction to run
+    those "only if your changes require code validation").
+11. Did not commit or push any changes.
 
-**Files created:**
-`src/components/layout/.gitkeep`, `src/components/sections/.gitkeep`,
-`src/components/ui/.gitkeep`, `src/lib/.gitkeep`,
-`src/content/siteConfig.ts`, `src/content/navigation.ts`, `src/content/services.ts`,
-`src/content/technologies.ts`, `src/content/industries.ts`,
-`src/app/sitemap.ts`, `src/app/robots.ts`,
-`public/images/hero/.gitkeep`, `public/images/logo/.gitkeep`,
-`public/images/tech-icons/.gitkeep`.
+**Files created:** `VISUAL_DIRECTION.md`.
 
-**Files modified:** `TASKS.md`, `CHANGELOG.md`, `AI_WORK_LOG.md` (this entry) — documentation
-only; no existing source file (`layout.tsx`, `page.tsx`, `globals.css`, `favicon.ico`,
-config files) was changed.
+**Files modified:** `TASKS.md` (T004 status + notes), `CHANGELOG.md` (new entry),
+`AI_WORK_LOG.md` (this entry).
 
 **Files removed:** None.
 
-**Architectural decisions made:**
-- Assigned the new task ID **T027** rather than renumbering T004–T026 (see point 2 above).
-- Used `.gitkeep` markers for directories that must exist but have no files yet, rather than
-  placeholder component code, per explicit instruction.
-- Content data modules ship with types + empty/minimal exports only; no service, technology,
-  or industry copy was written — reserved for T005.
-- `sitemap.ts`/`robots.ts` were implemented functionally now (not deferred), since they are
-  simple, low-risk Next.js framework conventions rather than "landing-page UI," and having
-  them in place matches "future tasks can be implemented in a clean, predictable
-  architecture." They use a placeholder URL, not a real one.
-- Kept `favicon.ico` in `src/app/` rather than moving it to `public/` per the literal target
-  tree, favoring the correct modern convention over literal tree-matching.
+**Key design decisions made:**
+- Introduced **Interactive Blue (`#0072D9`)** as a supporting UI color (not a new brand
+  color) specifically to fix the computed AA contrast failure of Brand Blue as text/button
+  fill — justified in the document as an accessibility-driven derivative, per the explicit
+  "document as supporting UI colors" carve-out in the instructions.
+- Restricted Accent Orange to background/large-text use only, based on a contrast failure
+  this task discovered that T003 had not explicitly checked.
+- Simplified header navigation to in-page anchors (not the production mega-menu), reduced
+  header height (72px vs. ~99px), switched `fixed` to `sticky` positioning.
+- Replaced the Bootstrap grid/breakpoint system with Tailwind's own grid/flex utilities and
+  default breakpoint scale, rather than porting the production site's inferred breakpoints.
+- Defined explicit accessibility requirements with no production-site equivalent: `<main>`
+  landmark, skip-to-content link, `focus-visible` states, strict non-duplicated heading
+  hierarchy, `prefers-reduced-motion` handling.
+- Deferred the actual Geist→Inter font-import change and Tailwind `@theme` token wiring to
+  a future implementation task, keeping T004 purely documentation.
 
 **Validation performed:**
-- `npx tsc --noEmit` — passed with no errors.
-- `npm run lint` — passed with no errors or warnings.
-- `npm run build` — succeeded; new `/robots.txt` and `/sitemap.xml` static routes confirmed
-  in the build output alongside the existing `/` and `/_not-found`.
-- `git status` — confirmed only new files/directories were added (`public/`,
-  `src/app/robots.ts`, `src/app/sitemap.ts`, `src/components/`, `src/content/`, `src/lib/`);
-  no existing tracked file was modified.
+- Manually reviewed `VISUAL_DIRECTION.md` for internal consistency (color hex values, sizes,
+  and radii referenced identically across every section that mentions them).
+- Cross-checked every brand color against `PRODUCTION_SITE_ANALYSIS.md` §2 — confirmed no
+  brand color was altered, and the one new value (`#0072D9`) is documented as a supporting
+  UI color, not a brand color, with an explicit accessibility justification.
+- Confirmed accessibility requirements are explicitly and separately covered (§11), not just
+  implied elsewhere.
+- `git status` — confirmed only `VISUAL_DIRECTION.md`, `TASKS.md`, `CHANGELOG.md`, and
+  `AI_WORK_LOG.md` changed; no source/config file was touched, so no build/lint/type-check
+  was run (none was applicable).
 
 **Human review:** Pending.
 
-**Human decisions:** Specified the exact target folder structure and the constraint to
-scaffold structure only, not implementation; specified `.gitkeep`-style minimalism for empty
-folders; specified a prepared (not executed) commit message
-("chore: create base project structure") contingent on a clean implementation.
+**Human decisions:** Specified the exact 12-area scope and the "at minimum include" list for
+`VISUAL_DIRECTION.md`; specified the confirmed brand palette and prohibited inventing new
+brand colors (with a carve-out for documented supporting UI shades); explicitly required the
+T003 button-contrast issue to be addressed; required the hero's *visual direction* to be
+documented without creating the Hero component itself.
+
+**Manual work performed by developer:** Not recorded.
+
+**Issues encountered:** None — T004 in this prompt matched TASKS.md's actual T004 exactly,
+with no ID mismatch to resolve this time.
+
+**Resolution:** Not applicable.
+
+**Result:** T004 completed successfully. A comprehensive, internally consistent, and
+accessibility-verified design system now exists for T007–T013 to implement against, with
+zero UI code or content written ahead of schedule.
+
+**Approximate human effort/time:** Not recorded.
+**Approximate AI-assisted effort/time:** Not recorded.
+**Git commit:** None yet (not committed, per instruction — pending human review).
+
+---
+
+## T028 — Implement global typography & base styling
+
+**Date:** 2026-09-07
+
+**Objective:** Implement the global typography and base-styling foundation defined by
+`VISUAL_DIRECTION.md` — font setup, Tailwind v4 theme tokens, global base styles, and
+accessibility-safe defaults (focus states, reduced motion) — without building any Header,
+Hero, or section component.
+
+**Human instructions (summary):** Read CLAUDE.md/TASKS.md/VISUAL_DIRECTION.md/globals.css
+first; confirm T005's actual TASKS.md definition; do not undo/revert any previous work,
+including the T027-created folder structure (explicitly preserve it even though T027 is not
+the active task); implement Inter font setup, brand color tokens (with Interactive Blue
+handling the documented contrast fix), Tailwind v4 `@theme` integration, minimal global base
+styles, accessibility defaults (focus-visible, reduced-motion — but not a skip link), and a
+Tailwind-native responsive foundation — with no Header/Hero/section/footer UI, no new
+dependencies, no framework/version changes. If a technical detail conflicted with
+VISUAL_DIRECTION.md, stop and reason about the smallest fix rather than silently changing
+direction. Update TASKS.md/CHANGELOG.md/AI_WORK_LOG.md; validate with tsc/lint/build; do not
+commit or push.
+
+**Claude work performed:**
+1. Confirmed via `git log`/`git status` that nothing had changed since the last session (the
+   T027-doc-revert was still sitting uncommitted, exactly as left).
+2. Read `TASKS.md` fresh and confirmed its actual T005 is "Finalize content mapping," not
+   "Implement Global Typography & Base Styling" — the same class of ID mismatch encountered
+   twice before. Applied the now-established policy: assigned the next unused ID, **T028**
+   (not T005, and — after checking — not T027 either, since T027 had been fully reverted
+   from the task list in the prior turn; used T028 to avoid colliding with a stray informal
+   "T027" reference already present in this file's T004 entry, and fixed that reference for
+   consistency rather than leaving two different things both called "T027").
+3. Read `VISUAL_DIRECTION.md` in full (already authored in T004) as the design source of
+   truth, and re-inspected `globals.css`, `layout.tsx`, `package.json`, and the full
+   `src/`/`public/` tree from the earlier base-structure work (the folder scaffolding whose
+   documentation entries were later reverted per the human's request, while its files were
+   explicitly kept — see the note on T028 below) to confirm exactly what already existed
+   before changing anything.
+4. **Identified a real conflict between the existing scaffold and VISUAL_DIRECTION.md**: the
+   default `create-next-app` template's `prefers-color-scheme: dark` auto-switch (and its
+   `--background`/`--foreground` indirection) would silently show unreviewed dark colors
+   (`#0a0a0a`/`#ededed`) to any visitor with OS dark mode enabled — colors never validated
+   against any of the T004 contrast computations, which all assumed a white background. Per
+   instruction, reasoned about the smallest fix rather than inventing a dark theme or
+   silently leaving it in place: removed the dark-mode block entirely and set
+   `color-scheme: light` explicitly, since VISUAL_DIRECTION.md defines one fixed light-mode
+   design system with no dark variant anywhere in its 15 sections.
+5. Rewrote `src/app/globals.css`: added a `@theme inline` block with six brand/UI color
+   tokens (Brand Blue, Interactive Blue, Ink, Slate, Accent Orange, Surface Muted — White
+   intentionally not aliased, since it maps directly to Tailwind's built-in `white` with no
+   semantic gain) and nine typography tokens (`--text-h1`/`-h1-lg`, `--text-h2`/`-h2-lg`,
+   `--text-h3`, `--text-h4`, `--text-body`, `--text-small`, `--text-button`, each paired with
+   a `--*--line-height`, using Tailwind v4's native paired-token convention — confirmed
+   correct by finding the same convention already used in Tailwind's own built-in
+   `--text-sm`/`--text-sm--line-height` tokens in the compiled output). Font weights were
+   deliberately left as Tailwind's existing `font-*` utilities rather than new tokens, per
+   the explicit instruction against unnecessary property aliases.
+6. Picked concrete pixel values within VISUAL_DIRECTION.md's stated ranges where the
+   document gave a range rather than one number (H1 desktop 44px within its documented
+   40–48px range; H2 desktop 30px within its 28–32px range) — a normal implementation
+   decision, not a deviation, since the document itself invited exactly this at
+   implementation time. Added an H4 token (16px/600, not explicitly sized in
+   VISUAL_DIRECTION.md's table, which stopped at H3) as a natural extension of the
+   documented scale, per the task's explicit request for an H4 utility. Did not invent a
+   separate eyebrow/overline token, since VISUAL_DIRECTION.md's own typography table has no
+   distinct eyebrow level and the task's instruction to add one was conditional ("if
+   required by the visual direction") — Small/supporting text (14px) serves that role.
+7. Added minimal global base styles only: `body` background/text-color/font-family, a
+   default link color/underline-offset rule, a `:focus-visible` outline, and a
+   `prefers-reduced-motion: reduce` block collapsing animation/transition durations.
+   Deliberately did **not** add bare heading-element styling (`h1 {...}` etc.), box-sizing
+   resets, or image/form-element normalization — confirmed by inspection that Tailwind v4's
+   Preflight (loaded via `@import "tailwindcss"`) already handles all of these, so adding
+   them would duplicate existing Tailwind behavior and risk exactly the "aggressive global
+   styling future components will need to override" the instructions warned against.
+8. Updated `src/app/layout.tsx`: replaced the `Geist`/`Geist_Mono` font imports with a single
+   `Inter` import (`next/font/google`, `display: "swap"`, `variable: "--font-inter"`).
+   Removed Geist Mono entirely rather than replacing it with an Inter-mono equivalent, since
+   nothing in the project uses monospace text — keeping an unused webfont would add load
+   weight with no purpose, and Tailwind's built-in default `font-mono` stack remains
+   available if ever needed.
+9. **Validated the theme tokens actually work**, not just that they parse: an initial check
+   of the compiled production CSS showed the color tokens present but the typography tokens
+   entirely absent, which looked like a bug. Diagnosed it properly instead of assuming
+   either "it's broken" or "it's fine": temporarily added every new utility class
+   (`text-h1 md:text-h1-lg`, `bg-brand-blue`, `text-button`, etc.) to `page.tsx`, rebuilt,
+   and confirmed every single utility compiled with exactly the correct values — proving the
+   original "absence" was expected Tailwind v4 tree-shaking of genuinely unused utilities
+   (colors survive unconditionally in this Tailwind version; font-size-paired utilities do
+   not until referenced), not a configuration error. Reverted `page.tsx` back to its exact
+   original byte-for-byte content afterward (verified via `diff`) and re-ran full validation
+   on the real, final change set.
+10. Ran `npx tsc --noEmit`, `npm run lint`, and `npm run build` — all clean. Additionally
+    started a dev server and visually confirmed in-browser (via computed styles) that Inter
+    is active (`Inter, "Inter Fallback", ui-sans-serif, system-ui, sans-serif`), body color
+    is Dark Ink (`rgb(25, 39, 52)`), background is white, and `color-scheme: light` is set.
+11. Confirmed the pre-existing T027 folder structure (`src/components/*`, `src/content/*`,
+    `src/lib/`, `src/app/{sitemap,robots}.ts`, `public/images/*`) was untouched throughout —
+    no files from that work were removed or modified.
+12. Updated `TASKS.md` (new T028 entry), `CHANGELOG.md` (new entry), and this file (including
+    a small consistency fix to the T004 entry's stray "T027" reference, not a substantive
+    rewrite of that entry's content).
+13. Did not commit or push any changes.
+
+**Files created:** None.
+
+**Files modified:** `src/app/globals.css` (full rewrite — theme tokens + base styles),
+`src/app/layout.tsx` (Geist → Inter font swap), `TASKS.md`, `CHANGELOG.md`, `AI_WORK_LOG.md`
+(this entry, plus the small T004-entry consistency fix noted above).
+
+**Files removed:** None. (`src/app/page.tsx` was temporarily modified for diagnostic
+purposes during validation and restored to its exact original content before finishing —
+confirmed byte-identical via `diff`.)
+
+**Architectural decisions made:**
+- Assigned the new task **T028** rather than T005 or T027 (see point 2 above).
+- Removed the scaffolded dark-mode CSS as a conflict-resolution decision, not a silent
+  design change — reasoned explicitly per instruction before acting (see point 4).
+- Used Tailwind v4's native `--text-{name}`/`--text-{name}--line-height` paired-token
+  mechanism for the typography scale, rather than `@apply`-based custom classes or
+  component-level `@layer` rules — the more idiomatic v4-native approach, confirmed correct
+  against Tailwind's own built-in tokens in the compiled output.
+- Kept font-weight, box-sizing, and element normalization entirely on Tailwind's existing
+  mechanisms (utility classes / Preflight) rather than duplicating them globally.
+- Chose specific pixel values within VISUAL_DIRECTION.md's documented ranges (H1 44px, H2
+  30px) and added one small, clearly-justified extension (H4) not explicitly sized in that
+  document.
+
+**Validation performed:**
+- `npx tsc --noEmit` — clean.
+- `npm run lint` — clean, no errors/warnings.
+- `npm run build` — succeeded; confirmed `/`, `/_not-found`, `/robots.txt`, `/sitemap.xml`
+  all still prerender correctly.
+- Manually inspected the compiled production CSS to confirm every new theme variable and
+  utility (colors immediately; typography utilities via a temporary, fully-reverted test
+  usage) compiles to the exact documented values, with zero leftover Geist references.
+- Visually verified in-browser via computed styles (font-family, body color/background,
+  color-scheme) rather than relying on a screenshot alone.
+- Confirmed via `diff` that `src/app/page.tsx` was restored byte-for-byte to its pre-task
+  content after the temporary diagnostic edit.
+- `git status`/diff review confirmed only `globals.css`, `layout.tsx`, and the three
+  documentation files changed — no component, dependency, or config file was touched, and
+  the T027-created folder structure remains fully intact.
+
+**Human review:** Pending.
+
+**Human decisions:** Explicitly required preserving all prior work including the
+T027-created structure; specified the exact 12-area implementation scope; required stopping
+to reason about conflicts rather than silently changing design direction (applied to the
+dark-mode removal); explicitly deferred the skip-link to a later layout task.
 
 **Manual work performed by developer:** Not recorded.
 
 **Issues encountered & resolution:**
-1. *Task-ID mismatch* (T004 in the prompt vs. TASKS.md) — resolved by assigning a new stable
-   ID (T027) and disclosing the reasoning, rather than renumbering or silently redefining
-   T004 (see point 2 above).
-2. *Target tree included `favicon.ico` under `public/`*, which conflicts with the existing,
-   correct `src/app/favicon.ico` App Router convention — resolved by keeping the existing
-   file in place and explicitly flagging the deviation rather than silently moving it.
+1. *Task-ID mismatch* (T005 in the prompt vs. TASKS.md's actual "Finalize content mapping")
+   — resolved by assigning T028, consistent with the established policy, and additionally
+   resolving a secondary naming collision with a stray "T027" reference from a prior entry.
+2. *Dark-mode scaffold conflicted with VISUAL_DIRECTION.md's single light-mode design* —
+   resolved per explicit instruction by reasoning through the smallest fix (remove the
+   unvalidated dark-mode block, set `color-scheme: light`) rather than inventing a dark
+   theme or leaving unreviewed colors live.
+3. *Typography theme tokens appeared missing from the compiled CSS* — initially looked like
+   a bug; diagnosed via a temporary, fully-reverted test usage and confirmed it was expected
+   Tailwind v4 tree-shaking of unused utilities, not an implementation error.
 
-**Result:** T027 completed successfully. The base architecture now exists for later
-component/content/section tasks to build into, with zero UI or content implemented ahead of
-schedule, and all validation passing cleanly.
+**Result:** T028 completed successfully. The global typography and base-styling foundation
+now exists for T007+ component tasks to build against using semantic Tailwind utilities
+(`text-h1`, `bg-interactive-blue`, etc.) instead of arbitrary values, with all prior work —
+including the T027 folder structure — fully preserved and all validation passing cleanly.
 
 **Approximate human effort/time:** Not recorded.
 **Approximate AI-assisted effort/time:** Not recorded.
-**Git commit:** None yet (not committed, per instruction — pending human review; prepared
-message: "chore: create base project structure").
+**Git commit:** None yet (not committed, per instruction — pending human review).
+
+---
+
+## T005 — Finalize content mapping
+
+**Date:** 2026-09-07
+
+**Objective:** Populate the `src/content/*.ts` data modules (scaffolded empty in the earlier
+base-structure work) with the final, sourced copy/content for every planned landing-page
+section, with no invented statistics, claims, or testimonials — pure content/data, no
+component or layout changes.
+
+**Human instructions (summary):** A single terse instruction — "T005 — Finalize content
+mapping" — matching TASKS.md's actual T005 definition exactly, with no ID mismatch this
+time. Proceeded using TASKS.md's stated scope ("Confirm the final copy/content for each
+landing-page section, sourced from the production site or supplied by the user. No invented
+statistics, claims, or testimonials") plus CLAUDE.md's standing content/design rules.
+
+**Claude work performed:**
+1. Confirmed via `git status`/`git log` that nothing had changed since the last session.
+2. Read `TASKS.md` fresh, confirming T005's real definition and that it was genuinely next
+   (T001–T004 and T028 all completed, no mismatch to resolve this time).
+3. Re-read the existing empty content scaffolds (`navigation.ts`, `siteConfig.ts`,
+   `services.ts`, `technologies.ts`, `industries.ts`) and `VISUAL_DIRECTION.md` §5/§6/§7 to
+   confirm exactly what each section needs (nav = simplified anchors per §5; hero headline
+   copy explicitly deferred to T005 per §6; footer structure per §7).
+4. Sourced every piece of content from `PRODUCTION_SITE_ANALYSIS.md` §3's explicitly
+   *retained/factual* content only — cross-checked each item against that document's
+   "explicitly flagged — do NOT reuse" list to ensure no statistic, client name, testimonial,
+   or review score was carried over.
+5. **Paraphrased rather than copied** the multi-sentence prose (Transformation Intro body,
+   the four Core Services descriptions) into distinctly-worded versions preserving the same
+   meaning, per CLAUDE.md's rule against reproducing production-site copy directly. Left
+   short category/service/industry *names* (e.g. "Ecommerce & Retail", "Full Stack
+   Development") verbatim, since these are factual labels with no alternate phrasing that
+   wouldn't change their meaning — not creative prose.
+6. Populated `navigation.ts` with the 3 simplified anchor nav items (Services, Technologies,
+   Industries) per VISUAL_DIRECTION.md §5 — not the production mega-menu.
+7. Extended `siteConfig.ts` with a finalized tagline (reused from the production site's own
+   factual positioning statement), a real meta description (newly written, derived from
+   confirmed service/industry content, no invented stats), and a `primaryCta` object.
+8. Created `hero.ts` (eyebrow, headline, trust points — omitting the production's unverified
+   review-platform badges and client-count claims) and `transformationIntro.ts` (heading +
+   paraphrased body).
+9. Populated `services.ts` (4 core service categories with paraphrased descriptions and
+   sub-service labels; 6 "Other Services" labels, label-only per VISUAL_DIRECTION.md §7),
+   `technologies.ts`, and `industries.ts` (full 12-item list, verbatim labels).
+10. **For `technologies.ts`**, cross-referenced the production nav's full technology list
+    against the homepage's category headers (Front End, Back End, Mobile, CMS, Database,
+    DevOps and Cloud, Project Management) and found specific tool/product names were only
+    ever confirmed for 4 of those 7 categories during T003. Rather than inventing plausible
+    but unconfirmed names for Database/DevOps and Cloud/Project Management (e.g. guessing
+    "AWS" or "Jira" were never actually observed), deliberately omitted those three
+    categories and documented why, instead of silently filling every category to look
+    complete.
+11. **Created `footer.ts`** with the four office locations and their full addresses
+    (factual contact information, reused directly since addresses aren't "content" in the
+    sense the no-verbatim-copying rule is about) — and explicitly did *not* invent Privacy
+    Policy/Terms & Conditions links, since no such pages exist in this project's scope and
+    linking to the production WordPress site's versions would reintroduce an unwanted
+    coupling. Documented that footer "Services"/"Technologies" columns should be composed by
+    the future footer component directly from `services.ts`/`technologies.ts` rather than
+    duplicating those lists a second time.
+12. **Surfaced rather than silently resolved a genuine open business decision**: the primary
+    CTA has no real destination yet (no contact page/form exists in v1 scope, and TASKS.md's
+    T022/T023 hosting/subdomain questions are also still open). Set
+    `siteConfig.primaryCta.href` to a same-page footer anchor (`#footer`) as an honest,
+    functional-enough placeholder — not a dead `#` link — with a comment flagging it as
+    provisional, following the same pattern already established for `siteConfig.url` in the
+    earlier base-structure work.
+13. Deliberately did **not** touch `layout.tsx`, `globals.css`, or any component — kept this
+    task strictly to `src/content/*.ts` data files, deferring actual wiring of this content
+    into JSX to the section-implementation tasks (T007+).
+14. Ran `npx tsc --noEmit`, `npm run lint`, and `npm run build` — all clean.
+15. Updated `TASKS.md` (T005 → Completed), `CHANGELOG.md` (new entry), and this file.
+16. Did not commit or push any changes.
+
+**Files created:** `src/content/hero.ts`, `src/content/transformationIntro.ts`,
+`src/content/footer.ts`.
+
+**Files modified:** `src/content/navigation.ts`, `src/content/siteConfig.ts`,
+`src/content/services.ts`, `src/content/technologies.ts`, `src/content/industries.ts`,
+`TASKS.md`, `CHANGELOG.md`, `AI_WORK_LOG.md` (this entry).
+
+**Files removed:** None.
+
+**Content/design decisions made:**
+- Reused short brand/category terms verbatim (CTA label "Consult Narola", service/tech/
+  industry names) since they're labels, not prose — rewriting them would only obscure their
+  meaning, unlike the multi-sentence descriptions, which were genuinely reworded.
+- Omitted 3 of 7 technology categories rather than inventing tool names for them.
+- Omitted legal footer links rather than linking to the WordPress site or a non-existent page.
+- Left the primary CTA's true destination as an explicitly flagged open question with a
+  functional placeholder, rather than guessing at a contact mechanism (mailto vs. form vs.
+  external link) that has real product implications.
+
+**Validation performed:**
+- `npx tsc --noEmit` — clean.
+- `npm run lint` — clean, no errors/warnings.
+- `npm run build` — succeeded; no impact on existing routes (content files are not yet
+  imported by any component, as expected at this stage).
+- Cross-checked every content item against `PRODUCTION_SITE_ANALYSIS.md` §3's "explicitly
+  flagged" list to confirm no unverified claim was reused.
+- `git status` confirmed only `src/content/*.ts` files and the three documentation files
+  changed — no component, layout, or config file was touched in this task (the `globals.css`/
+  `layout.tsx` changes visible in the working tree are leftover from the still-uncommitted
+  T028 work, not from this task).
+
+**Human review:** Pending.
+
+**Human decisions:** None beyond the single instruction to proceed with T005 as defined in
+TASKS.md.
+
+**Manual work performed by developer:** Not recorded.
+
+**Issues encountered & resolution:**
+1. *No confirmed technology names for 3 of the production site's tech categories* —
+   resolved by omitting those categories rather than inventing plausible-sounding tool names.
+2. *No real contact destination exists for the primary CTA* — resolved by using a same-page
+   placeholder anchor and explicitly flagging the underlying decision as still open, rather
+   than picking a specific mechanism (mailto/form/external link) unilaterally.
+
+**Result:** T005 completed successfully. Every planned landing-page section now has
+finalized, sourced, non-invented content ready for T007+ to consume, with two clearly
+documented open items (CTA destination, incomplete technology categories) for the human to
+resolve when convenient rather than blocking on them.
+
+**Approximate human effort/time:** Not recorded.
+**Approximate AI-assisted effort/time:** Not recorded.
+**Git commit:** None yet (not committed, per instruction — pending human review).
+
+---
+
+## T006 — Finalize assets
+
+**Date:** 2026-09-07
+
+**Objective:** Source and finalize the logo, hero imagery, and technology/industry icon
+assets for the landing page, with confirmed rights, per TASKS.md's T006 definition.
+
+**Human instructions (summary):** A single terse instruction — "T006 — Finalize assets" —
+matching TASKS.md's actual T006 definition exactly, no ID mismatch.
+
+**Claude work performed:**
+1. Confirmed via `git status`/`git log` that nothing had changed since the last session, and
+   read TASKS.md fresh to confirm T006's real definition and that T005 was genuinely
+   complete beforehand.
+2. Read VISUAL_DIRECTION.md §8/§9 (imagery/icon direction) and inspected the existing
+   `public/images/{hero,logo,tech-icons}/` folders (empty, `.gitkeep`-marked, from the
+   earlier base-structure work).
+3. **Identified three genuine open decisions with real rights/dependency implications**
+   before creating or downloading anything, and asked the human rather than guessing:
+   whether to reuse the production site's official logo SVG or build a text wordmark;
+   whether the hero should reuse the production photo, use an abstract graphic, or omit
+   imagery entirely; and whether technology/industry icons should be hand-authored (zero
+   dependencies) or sourced via a new icon-library package (a dependency decision earlier
+   tasks had explicitly deferred). The human chose: reuse the official logo, use an abstract
+   brand-color graphic (no photography) for the hero, and hand-author icons with no new
+   dependencies.
+4. Downloaded the official logo SVG directly from the production site
+   (`wp-content/uploads/2022/09/nisl-logo.svg`, 7.4KB, 173×50 viewBox) to
+   `public/images/logo/narola-infotech-logo.svg` — treated as low-risk since it's the
+   company's own brand mark (not third-party content) and the human explicitly chose this
+   option. Removed the now-redundant `.gitkeep` from that folder.
+5. Hand-authored `public/images/hero/hero-graphic.svg` — an abstract illustration (a soft
+   background blob, two overlapping "card" shapes with content-line and button details, and
+   two accent dots) built entirely from the six finalized brand-color tokens, avoiding both
+   photography and any resemblance to a specific real UI. Removed the redundant `.gitkeep`.
+6. Hand-authored 12 industry icon SVGs (`public/images/industries/*.svg`, new folder) —
+   simple, generic, non-trademarked line-icon symbols (shopping bag, house, checkmark-circle,
+   heart, paper plane, graduation cap, play-circle, trophy, dumbbell, delivery truck, leaf,
+   person/community), each a 24×24 viewBox with Interactive Blue (`#0072D9`) baked in
+   directly as the stroke/fill color (not `currentColor`, since these are consumed as opaque
+   `<img>`/`next/image` assets, not inlined SVG components, so CSS-based color inheritance
+   wouldn't apply). Visually verified 3 of the 12 (heart, house, trophy) by rendering them in
+   a browser — all correct; a Browser-pane connectivity issue prevented screenshotting the
+   remaining 9 icons and the hero graphic, but all were manually checked for valid SVG syntax
+   and sensible coordinate geometry (shapes within their viewBox, no overlap errors), and use
+   the identical technique already visually confirmed to work.
+7. **Deliberately did not create any technology icon/logo assets.** Reasoned through this
+   rather than mechanically producing 14 files: recreating trademarked logos (React,
+   Angular, PHP, etc.) accurately by hand from memory isn't reliably achievable and risks
+   looking like an inaccurate, unauthorized derivative of a real trademark; a uniform
+   text-badge treatment sourced directly from the technology names already in
+   `technologies.ts` is safer, avoids duplicating the same information as both content data
+   and a separate image asset, and was within the bounds of what the human's chosen option
+   ("hand-authored... won't be pixel-perfect brand marks") anticipated. Documented this
+   decision directly in `technologies.ts` for whoever implements T011.
+8. Wired the new assets into the content layer: added `logo` (src/alt/width/height) to
+   `siteConfig.ts`, added `image` (src/alt/width/height) to `hero.ts`, and added an `icon`
+   field to every entry in `industries.ts` pointing at its new SVG file.
+9. Ran `npx tsc --noEmit`, `npm run lint`, and `npm run build` — all clean.
+10. Checked total new asset weight (~28KB, all SVG, no raster images) against
+    VISUAL_DIRECTION.md's performance principles — comfortably lightweight.
+11. Updated `TASKS.md` (T006 → Completed), `CHANGELOG.md` (new entry), and this file.
+12. Did not commit or push any changes; did not modify the production WordPress site (only
+    downloaded one small public brand asset from it, which is not a modification).
+
+**Files created:** `public/images/logo/narola-infotech-logo.svg`,
+`public/images/hero/hero-graphic.svg`, 12 files under `public/images/industries/`.
+
+**Files modified:** `src/content/siteConfig.ts` (added `logo`), `src/content/hero.ts`
+(added `image`), `src/content/industries.ts` (added `icon` per entry),
+`src/content/technologies.ts` (added a documentation comment, no data change), `TASKS.md`,
+`CHANGELOG.md`, `AI_WORK_LOG.md` (this entry).
+
+**Files removed:** `public/images/logo/.gitkeep`, `public/images/hero/.gitkeep` (both
+redundant once real files existed in those folders). `public/images/tech-icons/.gitkeep`
+was deliberately left in place — that folder stays reserved/empty per the technology-icon
+decision above.
+
+**Asset/content decisions made:**
+- Reused the production site's exact logo file rather than recreating it, since it's the
+  company's own brand mark and the human explicitly authorized this.
+- Used an abstract, brand-color-only illustration for the hero rather than photography,
+  per the human's choice — sidesteps photo-rights questions entirely for now.
+- Hand-authored all icons as plain SVG with zero new dependencies, per the human's choice.
+- Baked a fixed color (Interactive Blue) directly into each icon file rather than using
+  `currentColor`, since these are opaque image assets, not inlined components.
+- Omitted technology icon assets entirely, favoring a text-badge treatment over
+  hand-drawn logo approximations — a decision made and disclosed, not silently skipped.
+
+**Validation performed:**
+- `npx tsc --noEmit` — clean.
+- `npm run lint` — clean, no errors/warnings.
+- `npm run build` — succeeded; no route/behavior changes (assets aren't yet rendered by any
+  component).
+- Visually verified 3 of 12 industry icons by rendering them in a browser (heart, house,
+  trophy) — all rendered correctly with no clipping or malformed paths.
+- Manually reviewed the remaining 9 icons and the hero graphic for valid SVG syntax and
+  in-bounds coordinate geometry, since a Browser-pane connectivity issue prevented
+  screenshotting them directly.
+- Confirmed total new asset size (~28KB) is lightweight and SVG-only (no raster images
+  needing separate optimization).
+
+**Human review:** Pending. In particular, the 9 industry icons and the hero graphic that
+could not be screenshot-verified are worth a manual look before relying on them in T012/T008.
+
+**Human decisions:** Chose to reuse the official production logo SVG; chose an abstract
+brand-color graphic over photography for the hero; chose hand-authored zero-dependency SVGs
+over an icon-library package for icons.
+
+**Manual work performed by developer:** Not recorded.
+
+**Issues encountered & resolution:**
+1. *Three asset-sourcing decisions carried real rights/dependency implications* — resolved
+   by asking the human explicitly before creating or downloading anything, rather than
+   assuming.
+2. *Technology icons would require recreating 14 trademarked logos by hand* — resolved by
+   choosing a text-badge content-driven approach instead and documenting why, rather than
+   producing inaccurate logo approximations.
+3. *Browser-pane connectivity issue* prevented screenshotting 9 of 12 industry icons and the
+   hero graphic — resolved by manually verifying SVG syntax/geometry instead of silently
+   claiming full visual verification, and flagging the gap plainly for human review.
+
+**Result:** T006 completed successfully. The landing page now has a finalized, rights-clear,
+lightweight (~28KB) asset set — logo, hero graphic, and 12 industry icons — wired into the
+content layer and ready for T007+ to consume, with the technology-icon scope deliberately
+narrowed and documented rather than filled with risky approximations.
+
+**Approximate human effort/time:** Not recorded.
+**Approximate AI-assisted effort/time:** Not recorded.
+**Git commit:** None yet (not committed, per instruction — pending human review).

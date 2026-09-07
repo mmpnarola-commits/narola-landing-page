@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Brand colors — see VISUAL_DIRECTION.md §2. White (#FFFFFF) is intentionally not
+     aliased here: it maps directly to Tailwind's built-in `white`, which is already
+     unambiguous, so a brand alias would add no meaning. */
+  --color-brand-blue: #0084ff;
+  --color-interactive-blue: #0072d9;
+  --color-ink: #192734;
+  --color-slate: #4c5a67;
+  --color-accent-orange: #e9852a;
+  --color-surface-muted: #f6f7fa;
+
+  /* Typography — see VISUAL_DIRECTION.md §3. Font weights intentionally use Tailwind's
+     existing font-* utilities (font-normal/semibold/bold) directly; only size +
+     line-height are aliased here, since Tailwind has no built-in name for this
+     project's specific scale. H1/H2 have a separate "-lg" token for the md:+ desktop
+     size per VISUAL_DIRECTION.md; H3/H4/body/small/button sizes are constant across
+     breakpoints and so need only one token each. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --text-h1: 2rem; /* 32px, mobile */
+  --text-h1--line-height: 1.2;
+  --text-h1-lg: 2.75rem; /* 44px, md:+ */
+  --text-h1-lg--line-height: 1.15;
+
+  --text-h2: 1.5rem; /* 24px, mobile */
+  --text-h2--line-height: 1.25;
+  --text-h2-lg: 1.875rem; /* 30px, md:+ */
+  --text-h2-lg--line-height: 1.25;
+
+  --text-h3: 1.25rem; /* 20px, all breakpoints */
+  --text-h3--line-height: 1.35;
+
+  --text-h4: 1rem; /* 16px, all breakpoints */
+  --text-h4--line-height: 1.4;
+
+  --text-body: 1rem; /* 16px, all breakpoints */
+  --text-body--line-height: 1.6;
+
+  --text-small: 0.875rem; /* 14px, all breakpoints */
+  --text-small--line-height: 1.5;
+
+  --text-button: 1rem; /* 16px, all breakpoints */
+  --text-button--line-height: 1.2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  /* No dark theme is defined anywhere in VISUAL_DIRECTION.md — this is a fixed
+     light-mode design. Declaring it explicitly stops the browser from applying its
+     own dark-mode form-control/scrollbar styling. */
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #fff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+a {
+  color: var(--color-interactive-blue);
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-interactive-blue);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

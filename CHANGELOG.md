@@ -11,30 +11,109 @@ below as implying otherwise.
 
 ## [Unreleased]
 
-### 2026-09-07 — T027: Base folder structure
+### 2026-09-07 — T006: Finalize assets
 #### Added
-- `src/components/{layout,sections,ui}/` — empty directories (via `.gitkeep`) reserved for
-  layout, section, and reusable UI components in later tasks.
-- `src/content/{siteConfig,navigation,services,technologies,industries}.ts` — typed data
-  modules with interface definitions and empty/minimal exports; content itself is deferred
-  to T005 (Finalize content mapping).
-- `src/lib/` — empty directory (via `.gitkeep`) reserved for future shared utilities.
-- `src/app/sitemap.ts` and `src/app/robots.ts` — functional Next.js metadata routes, using a
-  placeholder site URL (`siteConfig.url`, defaulting to `https://example.com`) pending the
-  subdomain decision in T023/T024.
-- `public/images/{hero,logo,tech-icons}/` — empty directories (via `.gitkeep`) reserved for
-  assets to be added in T006 (Finalize assets).
+- `public/images/logo/narola-infotech-logo.svg` — official brand logo, sourced directly
+  from the production site (the company's own brand mark).
+- `public/images/hero/hero-graphic.svg` — hand-authored abstract illustration in brand
+  colors, used in place of photography for the hero section.
+- `public/images/industries/*.svg` — 12 hand-authored, generic (non-trademarked) line icons,
+  one per industry, in Interactive Blue.
+- `logo`/`image` fields added to `src/content/siteConfig.ts`/`hero.ts`, and an `icon` field
+  added to each entry in `src/content/industries.ts`, wiring the content layer to these new
+  asset paths.
 
 #### Notes
-- No landing-page UI (Header, Footer, Hero, or any section component) was implemented.
-- No content/copy was populated — all content modules export empty arrays/typed scaffolding
-  only, per the project rule against inventing content ahead of T005.
-- Existing Next.js scaffold files (`layout.tsx`, `page.tsx`, `globals.css`, `favicon.ico`)
-  were preserved as-is; `favicon.ico` was deliberately kept in `src/app/` (the modern Next.js
-  App Router convention) rather than moved to `public/`, since that would be a regression
-  with no benefit — see AI_WORK_LOG.md for the full rationale.
-- Validated with `tsc --noEmit`, `npm run lint`, and `npm run build` — all clean; `/robots.txt`
-  and `/sitemap.xml` now generate correctly as static routes.
+- Three sourcing decisions were confirmed with the human before creating anything: reuse the
+  official logo SVG (vs. a text wordmark), use an abstract graphic instead of photography for
+  the hero (vs. reusing the production photo or omitting imagery), and hand-author icons
+  with zero new dependencies (vs. adding an icon-library package).
+- **No technology icon/logo assets were created.** Recreating 14 trademarked technology
+  logos (React, Angular, PHP, etc.) by hand from memory risked inaccurate, unauthorized-
+  looking derivatives, and `technologies.ts` already fully identifies each technology by
+  name — duplicating that as image assets would duplicate content across layers for no
+  benefit. `technologies.ts` documents that the Technologies section (T011) should render
+  these as text/wordmark badges instead.
+- Total new asset weight: ~28KB across all files (all SVG, no raster images) — consistent
+  with VISUAL_DIRECTION.md's performance principles.
+- No components were built; content files were updated only to add asset-path fields, not
+  new copy.
+
+### 2026-09-07 — T005: Finalize content mapping
+#### Added
+- `src/content/hero.ts` — hero eyebrow, headline, and trust-point copy.
+- `src/content/transformationIntro.ts` — "Accelerate Your Business Transformation..."
+  section heading and body copy.
+- `src/content/footer.ts` — the four office locations (North Carolina, Virginia, Surat,
+  Nashik) with full addresses.
+
+#### Changed
+- Populated `src/content/navigation.ts` with the three simplified in-page anchor nav items
+  (Services, Technologies, Industries) per VISUAL_DIRECTION.md §5.
+- Populated `src/content/siteConfig.ts` with the finalized tagline, a real meta description,
+  and the primary CTA label/href (see Notes).
+- Populated `src/content/services.ts` with the 4 core service categories (each with a
+  paraphrased description and sub-service labels) and the 6 "Other Services" labels.
+- Populated `src/content/technologies.ts` with 4 confirmed technology categories (Front End,
+  Back End, Mobile, CMS) and their technology names.
+- Populated `src/content/industries.ts` with the full 12-industry list.
+
+#### Notes
+- All content sourced from `PRODUCTION_SITE_ANALYSIS.md`'s explicitly retained/factual
+  content only. Multi-sentence copy (transformation intro, service descriptions) was
+  paraphrased, not copied verbatim, per CLAUDE.md. None of the flagged unverified statistics,
+  client names, testimonials, or review scores were reused.
+- Open item: the primary CTA (`siteConfig.primaryCta.href`) currently points to a same-page
+  footer anchor as a placeholder — this project has no contact page/form in v1 scope, and the
+  final destination (mailto, an embedded form, or an external link) is still an open decision.
+- Technology sub-categories with no confirmed tool names on the production site (Database,
+  DevOps and Cloud, Project Management) were intentionally omitted rather than guessed.
+- No components were built or modified — content/data files only.
+
+### 2026-09-07 — T028: Global typography & base styling
+#### Added
+- Tailwind v4 `@theme` tokens in `src/app/globals.css` for the finalized brand palette
+  (`--color-brand-blue`, `--color-interactive-blue`, `--color-ink`, `--color-slate`,
+  `--color-accent-orange`, `--color-surface-muted`) and typography scale (`--text-h1`/
+  `-h1-lg`, `--text-h2`/`-h2-lg`, `--text-h3`, `--text-h4`, `--text-body`, `--text-small`,
+  `--text-button`, each with a paired line-height), per VISUAL_DIRECTION.md §2–3.
+- Global base styles: body background (white) and text color (Dark Ink), default link
+  color/underline behavior (Interactive Blue), a visible `:focus-visible` outline, and a
+  `prefers-reduced-motion: reduce` safeguard collapsing animation/transition durations.
+- Inter font wired up in `src/app/layout.tsx` via `next/font/google` (replacing the default
+  `create-next-app` Geist/Geist Mono fonts), with `display: "swap"` and a generic
+  system-font fallback chain.
+
+#### Changed
+- Removed the scaffolded `prefers-color-scheme: dark` auto-switch and its `--background`/
+  `--foreground` variable indirection from `globals.css` — VISUAL_DIRECTION.md defines a
+  single fixed light-mode design with no dark variant, so the untouched framework
+  boilerplate was replaced with an explicit `color-scheme: light` and direct body colors.
+- Removed the unused Geist Mono font (no monospace text exists anywhere on this project).
+
+#### Notes
+- Documentation-only change plus global CSS/font wiring — no Header, Hero, or section
+  component was built or modified. `src/app/page.tsx` is unchanged.
+- All new Tailwind utilities were verified to compile correctly (confirmed via a temporary,
+  reverted test usage) — they don't appear in the production CSS yet because nothing
+  references them until component tasks (T007+) do, which is expected Tailwind v4 tree-shaking.
+- Validated with `tsc --noEmit`, `npm run lint`, and `npm run build` — all clean.
+
+### 2026-09-07 — T004: Visual direction
+#### Added
+- `VISUAL_DIRECTION.md` — finalized design system covering brand colors, typography,
+  layout/spacing, header/hero direction, per-section design language, reusable UI (cards,
+  buttons, icons), imagery guidelines, responsive breakpoints, accessibility requirements,
+  and performance principles, for future implementation tasks (T007+) to follow.
+
+#### Notes
+- Introduced one supporting UI color, Interactive Blue (`#0072D9`), alongside the existing
+  brand palette — used only for button/link text where white or light text needs WCAG AA
+  contrast, directly resolving the button-contrast failure (~3.65:1) computed in T003.
+  Computed contrast ratios for every color pairing used are included in the document.
+- No landing-page components (Header, Hero, section components, or `ui/` primitives) were
+  created or modified. No code files were changed — documentation only.
+- No new dependencies were added; no framework/architecture changes were made.
 
 ### 2026-09-07 — T003: Production website analysis
 #### Added

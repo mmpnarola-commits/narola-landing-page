@@ -1,0 +1,5 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#0072D9" stroke-width="1.5" role="img" aria-label="Sports">
+  <path d="M7 4h10v4a5 5 0 0 1-10 0V4z" stroke-linejoin="round"/>
+  <path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 13v3M9 20h6M10 16.5h4v3.5h-4z" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

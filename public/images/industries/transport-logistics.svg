@@ -1,0 +1,6 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#0072D9" stroke-width="1.5" role="img" aria-label="Transport and logistics">
+  <path d="M2 7h11v9H2z" stroke-linejoin="round"/>
+  <path d="M13 10h4l4 3v3h-8v-6z" stroke-linejoin="round"/>
+  <circle cx="6" cy="18" r="1.6"/>
+  <circle cx="17" cy="18" r="1.6"/>
+</svg>
