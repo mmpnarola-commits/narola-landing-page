@@ -30,13 +30,14 @@ project structured, traceable, and easy to maintain throughout AI-assisted devel
 
 ### T003 — Analyze production website
 
-**Status:** Not Started
-**Description:** Structured review of https://www.narolainfotech.com/ covering visual style,
-brand colors, typography, header, footer, hero, services, technologies, industries, buttons/
-CTAs, layout patterns, and responsive behavior. (Initial pass already completed during the
-pre-T001 analysis conversation — this task is for any deeper/follow-up review needed before
-implementation of a specific section.)
-**Notes:** Reference only — do not copy WordPress markup/code.
+**Status:** Completed
+**Description:** Structured review of https://www.narolainfotech.com/ covering overall
+structure, visual design, content, navigation, technical implementation, and SEO/
+accessibility, documented as a standalone reference for later tasks.
+**Notes:** Reference only — no WordPress markup/code copied. Findings, including which
+content is verified fact vs. an unverified production-site claim, are recorded in
+[PRODUCTION_SITE_ANALYSIS.md](PRODUCTION_SITE_ANALYSIS.md). See that file's §7 for
+landing-page-specific recommendations feeding into T004–T013.
 
 ### T004 — Finalize visual direction
 

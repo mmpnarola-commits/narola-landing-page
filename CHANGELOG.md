@@ -11,6 +11,21 @@ below as implying otherwise.
 
 ## [Unreleased]
 
+### 2026-09-07 — T003: Production website analysis
+#### Added
+- `PRODUCTION_SITE_ANALYSIS.md` — structured reference analysis of
+  https://www.narolainfotech.com/, covering overall page structure, brand colors/typography,
+  content inventory (with verified facts clearly separated from unverified production-site
+  claims), navigation structure, technical stack observations, SEO/accessibility findings
+  (including computed WCAG color-contrast ratios), and landing-page-specific recommendations.
+
+#### Notes
+- Documentation/reference only — no landing-page UI, components, or code was added.
+- No WordPress markup, CSS, or code was copied; the production site was not modified.
+- No statistics, awards, client names, or testimonials from the production site were adopted
+  as claims for the new landing page — they are explicitly flagged as reference-only in the
+  analysis document.
+
 ### 2026-09-07 — T002: Project documentation
 #### Added
 - `CLAUDE.md` — project purpose, technology, development/design/git rules, and AI workflow.

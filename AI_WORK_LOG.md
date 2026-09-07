@@ -187,4 +187,110 @@ specification. Nothing committed; changes await human review.
 
 **Approximate human effort/time:** Not recorded.
 **Approximate AI-assisted effort/time:** Not recorded.
-**Git commit:** None (not yet committed, per instruction).
+**Git commit:** `ef55d08` (T001 + T002 committed together by the developer as
+"chore: initialize landing page project").
+
+---
+
+## T003 — Analyze production website
+
+**Date:** 2026-09-07
+
+**Objective:** Produce a structured, documented analysis of the existing production
+WordPress website (https://www.narolainfotech.com/) covering overall structure, visual
+design, content, navigation, technical implementation, and SEO/accessibility, to serve as a
+standalone reference for later design/content/implementation tasks — without implementing
+any landing-page UI or modifying the production site.
+
+**Human instructions (summary):** Read CLAUDE.md and TASKS.md first; do not redo T001/T002;
+do not start T004+. Analyze the production site across 7 categories (structure, visual
+design, content, navigation, technical, SEO/accessibility, landing-page recommendations),
+clearly separating verified facts from assumptions, and explicitly not inventing statistics,
+awards, clients, or testimonials. Document findings in a dedicated file (suggested:
+`PRODUCTION_SITE_ANALYSIS.md`), update TASKS.md/CHANGELOG.md/AI_WORK_LOG.md, avoid
+implementation code, and show a summary (files, findings, recommendations, assumptions, git
+diff/status) before any commit.
+
+**Claude work performed:**
+1. Re-read CLAUDE.md and TASKS.md in full to confirm current project/task status before
+   starting.
+2. Noticed the repository had a new commit (`ef55d08`) since the prior session — verified via
+   `git show --stat` that it matched exactly the T001+T002 work already reviewed, confirming
+   no unexpected changes had occurred.
+3. Opened the live production site in a browser and performed a structured technical
+   inspection beyond the earlier (pre-T001) surface-level pass, specifically gathering:
+   - `<title>`, meta description, canonical URL, Open Graph tags, `<meta name="generator">`
+     (confirmed WordPress 7.1), `<html lang>`.
+   - Full heading hierarchy (`h1`–`h6`) across the homepage, identifying duplicate/
+     inconsistent heading usage.
+   - Image count/alt-text audit (158 images, 0 missing alt attributes) and lazy-loading
+     usage (none observed — all images eager-loaded).
+   - Semantic landmark counts (`header`, `nav`, `main`, `section`, `footer`, `article`,
+     `aside`) — found zero `<main>` elements and no skip-link.
+   - All loaded third-party/library scripts (jQuery, Bootstrap 5.0.2, Popper, jquery.mixitup,
+     OwlCarousel, Contact Form 7, Font Awesome, GA/GTM/Clarity/LinkedIn Insight/Tawk.to).
+   - Full navigation mega-menu structure and every top-level/sub-item target URL.
+   - Primary CTA destinations (confirmed all point to `/contact-us/`).
+   - Resource/timing data (194 requests, ~3s DOMContentLoaded, ~4s load) and carousel/slider
+     usage (4 OwlCarousel instances detected).
+4. Computed WCAG 2.1 relative-luminance color-contrast ratios by hand for the two most
+   relevant color pairs (grey body text on white: ≈7.1:1, passes AA/near-AAA; white button
+   text on the primary blue: ≈3.65:1, fails AA for normal-size text) rather than assuming
+   contrast was fine, to give T004 a concrete, evidence-based flag instead of a vague
+   "might be borderline" note from the earlier pass.
+5. Synthesized this technical pass together with the visual/content findings already
+   gathered in the pre-T001 analysis conversation (brand color tokens, typography, button
+   styling, section order, service/technology/industry lists) into one consolidated
+   document.
+6. Authored `PRODUCTION_SITE_ANALYSIS.md`, structured around the 7 requested categories,
+   with every claim explicitly labeled **Observed**, **Computed**, or **Assumption/
+   Inference**, and a dedicated "explicitly flagged — do not reuse" list for all statistics,
+   awards, client names/logos, review scores, and testimonials found on the production site.
+7. Updated `TASKS.md` (T003 → Completed, with a pointer to the new analysis file),
+   `CHANGELOG.md` (new T003 entry), and this file.
+8. Did not implement any landing-page UI/components, did not add dependencies, did not
+   modify the production website, and did not commit or push any changes.
+
+**Files created:** `PRODUCTION_SITE_ANALYSIS.md`.
+
+**Files modified:** `TASKS.md` (T003 status + notes), `CHANGELOG.md` (new entry),
+`AI_WORK_LOG.md` (this entry).
+
+**Files removed:** None.
+
+**Validation performed:**
+- Cross-checked every factual claim in the analysis document against a live, direct
+  observation (DOM inspection, computed styles, network/resource timing, or page source) —
+  nothing was written from memory/assumption without being labeled as such.
+- Explicitly reviewed the content section to confirm no statistic, award, client name, or
+  testimonial from the production site was reworded into an implied claim about the new
+  landing page — all such content is quarantined in an explicit "do not reuse" list.
+- Confirmed via `git status`/`git diff` review (see chat) that only T003-related files
+  (`PRODUCTION_SITE_ANALYSIS.md`, `TASKS.md`, `CHANGELOG.md`, `AI_WORK_LOG.md`) changed —
+  no source/config files were touched.
+- No `npm run build`/`lint`/`dev` validation was applicable — this task produced no code.
+
+**Human review:** Pending.
+
+**Human decisions:** Specified the exact 7-category analysis scope and the requirement to
+separate verified facts from assumptions; explicitly ruled out inventing statistics/claims;
+specified the deliverable should be a dedicated reference file rather than a chat-only report
+(resolving the open question raised at the end of the prior turn).
+
+**Manual work performed by developer:** Not recorded.
+
+**Issues encountered:** None — the earlier session's uncertainty about the T003 task
+identity (a mismatched prompt had briefly proposed "Configure ESLint + Prettier" as T003)
+was resolved by the human before this task began, by explicitly re-confirming T003 as
+"Analyze production website" per the existing TASKS.md.
+
+**Resolution:** Not applicable.
+
+**Result:** T003 completed successfully. A comprehensive, fact-checked reference document
+now exists for use by T004 (visual direction) and the section-implementation tasks
+(T007–T013), without any implementation code being introduced and without the production
+site being touched.
+
+**Approximate human effort/time:** Not recorded.
+**Approximate AI-assisted effort/time:** Not recorded.
+**Git commit:** None yet (not committed, per instruction — pending human review).
