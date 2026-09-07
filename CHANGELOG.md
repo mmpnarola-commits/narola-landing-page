@@ -11,6 +11,31 @@ below as implying otherwise.
 
 ## [Unreleased]
 
+### 2026-09-07 — T027: Base folder structure
+#### Added
+- `src/components/{layout,sections,ui}/` — empty directories (via `.gitkeep`) reserved for
+  layout, section, and reusable UI components in later tasks.
+- `src/content/{siteConfig,navigation,services,technologies,industries}.ts` — typed data
+  modules with interface definitions and empty/minimal exports; content itself is deferred
+  to T005 (Finalize content mapping).
+- `src/lib/` — empty directory (via `.gitkeep`) reserved for future shared utilities.
+- `src/app/sitemap.ts` and `src/app/robots.ts` — functional Next.js metadata routes, using a
+  placeholder site URL (`siteConfig.url`, defaulting to `https://example.com`) pending the
+  subdomain decision in T023/T024.
+- `public/images/{hero,logo,tech-icons}/` — empty directories (via `.gitkeep`) reserved for
+  assets to be added in T006 (Finalize assets).
+
+#### Notes
+- No landing-page UI (Header, Footer, Hero, or any section component) was implemented.
+- No content/copy was populated — all content modules export empty arrays/typed scaffolding
+  only, per the project rule against inventing content ahead of T005.
+- Existing Next.js scaffold files (`layout.tsx`, `page.tsx`, `globals.css`, `favicon.ico`)
+  were preserved as-is; `favicon.ico` was deliberately kept in `src/app/` (the modern Next.js
+  App Router convention) rather than moved to `public/`, since that would be a regression
+  with no benefit — see AI_WORK_LOG.md for the full rationale.
+- Validated with `tsc --noEmit`, `npm run lint`, and `npm run build` — all clean; `/robots.txt`
+  and `/sitemap.xml` now generate correctly as static routes.
+
 ### 2026-09-07 — T003: Production website analysis
 #### Added
 - `PRODUCTION_SITE_ANALYSIS.md` — structured reference analysis of

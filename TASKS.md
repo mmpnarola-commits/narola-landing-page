@@ -24,6 +24,19 @@ nvm) because Next.js 14/15/16 all require a newer Node minimum than was installe
 project structured, traceable, and easy to maintain throughout AI-assisted development.
 **Notes:** No landing-page UI is implemented in this task.
 
+### T027 — Create base folder structure
+
+**Status:** Completed
+**Description:** Create the base `src/` and `public/` folder/file structure (components/
+layout, sections, ui; content data modules; lib; public/images subfolders; `sitemap.ts` and
+`robots.ts`) so later tasks have a clean, predictable architecture to build into.
+**Notes:** Added out of numeric sequence — this task was requested and completed after T003
+but does not correspond to the "T004" originally planned below ("Finalize visual
+direction"). Assigned the next unused ID rather than renumbering T004–T026, to keep existing
+task IDs stable for future reference. No UI components (Header/Footer/Hero/section
+components) or content data were implemented — only typed, empty scaffolding. See
+[AI_WORK_LOG.md](AI_WORK_LOG.md) for full detail.
+
 ---
 
 ## Design / Content

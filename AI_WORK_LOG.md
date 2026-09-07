@@ -293,4 +293,139 @@ site being touched.
 
 **Approximate human effort/time:** Not recorded.
 **Approximate AI-assisted effort/time:** Not recorded.
-**Git commit:** None yet (not committed, per instruction — pending human review).
+**Git commit:** `2190169` ("chore: analyze production website").
+
+---
+
+## T027 — Create base folder structure
+
+**Date:** 2026-09-07
+
+**Objective:** Create the base `src/` and `public/` folder/file structure for the landing
+page so that later tasks (component, content, and asset implementation) have a clean,
+predictable architecture to build into — without implementing any UI, content, or adding
+dependencies.
+
+**Human instructions (summary):** Read CLAUDE.md/TASKS.md first; confirm T003 complete; use
+PRODUCTION_SITE_ANALYSIS.md as reference only; do not redo T001–T003; do not start T005+.
+Create a specific target folder structure (`components/{layout,sections,ui}`,
+`content/{navigation,siteConfig,services,technologies,industries}.ts`, `lib/`,
+`public/images/{hero,logo,tech-icons}`, `app/sitemap.ts`, `app/robots.ts`), inspecting for
+existing files first, not duplicating anything, not implementing Header/Footer/Hero/section
+components or their content, and using a minimal (not placeholder-code) approach for folders
+with no files yet. Validate with type-check/lint/build, update documentation, show a full
+summary before any commit, and prepare (but do not push) a commit titled
+"chore: create base project structure" if the implementation is clean.
+
+**Claude work performed:**
+1. Read CLAUDE.md and TASKS.md in full; confirmed via `git log`/`git status` that T003 had
+   already been committed (`2190169`) since the prior session.
+2. **Identified a task-ID mismatch**: TASKS.md's actual T004 is "Finalize visual direction,"
+   not "Create Base Folder Structure" (the same class of mismatch encountered once before
+   with a proposed "T003 — Configure ESLint + Prettier"). Rather than pause for another
+   clarifying question — the prior occurrence had already established the human's general
+   preference and repeating that friction seemed low-value — made an explicit, disclosed
+   judgment call: assigned this task the next unused ID, **T027**, placed under "Project
+   Foundation" in TASKS.md, and left T004–T026 completely untouched rather than renumbering.
+   Reasoning recorded in TASKS.md and surfaced to the human in the chat summary: renumbering
+   would invalidate any future reference to existing IDs (e.g. "T007 — Header") and would
+   need repeating every time a new out-of-band task is inserted, whereas stable IDs plus a
+   clear note is more consistent with a "traceable" project.
+3. Inspected the existing `src/` and `public/` trees before creating anything — confirmed
+   `src/app/{favicon.ico,globals.css,layout.tsx,page.tsx}` were the only existing files, and
+   `public/` was empty. No existing files needed to be moved.
+4. Created empty directories `src/components/{layout,sections,ui}/`, `src/lib/`, and
+   `public/images/{hero,logo,tech-icons}/`, each marked with a `.gitkeep` file (a
+   zero-byte convention marker, not code) since git cannot track empty directories and the
+   instructions explicitly called for "an appropriate minimal approach" rather than
+   placeholder code.
+5. Created `src/content/siteConfig.ts`, `navigation.ts`, `services.ts`, `technologies.ts`,
+   and `industries.ts` — each with TypeScript interface/type definitions matching the shapes
+   implied by PRODUCTION_SITE_ANALYSIS.md, and empty (`services.ts`/`technologies.ts`/
+   `industries.ts`/`navigation.ts`) or minimally-factual (`siteConfig.ts`: company name,
+   generic description, placeholder URL) exports — deliberately not populating real
+   service/technology/industry copy, since that is T005's job and inventing it now would
+   violate the project's "no content ahead of its task" and "no invented claims" rules.
+6. Created `src/app/sitemap.ts` and `src/app/robots.ts` as functional Next.js metadata
+   routes (not placeholders — they build and serve correctly), using
+   `siteConfig.url` (which defaults to the RFC-2606 placeholder domain `https://example.com`
+   via `NEXT_PUBLIC_SITE_URL`) rather than guessing at a real subdomain, since the subdomain
+   is an explicitly open question (TASKS.md T023/T024).
+7. **Deliberately deviated from the literal target tree on one point**: did not move
+   `favicon.ico` from `src/app/` into `public/`. `src/app/favicon.ico` is the current,
+   correct Next.js App Router convention (auto-generates the favicon `<link>` tag) already
+   in place since T001; moving it to `public/` would be a regression with no benefit and
+   would conflict with "preserve the existing Next.js scaffold files" / "do not make
+   unrelated refactors." Flagged this explicitly rather than silently complying with the
+   literal tree.
+8. Did not create any component `.tsx` files (Header, Footer, Hero, section components, or
+   `ui/` primitives like Button/Card) — per instructions, these are deferred to their
+   respective later tasks (T007–T013) and were not "implemented" even as placeholders.
+9. Ran `npx tsc --noEmit` (clean), `npm run lint` (clean), and `npm run build` (succeeded;
+   confirmed `/robots.txt` and `/sitemap.xml` now generate as static routes alongside `/`).
+10. Updated `TASKS.md` (new T027 entry), `CHANGELOG.md` (new entry), and this file.
+11. Did not add any dependencies, did not touch the production website, and did not commit
+    or push any changes — left staged for human review per instructions.
+
+**Files created:**
+`src/components/layout/.gitkeep`, `src/components/sections/.gitkeep`,
+`src/components/ui/.gitkeep`, `src/lib/.gitkeep`,
+`src/content/siteConfig.ts`, `src/content/navigation.ts`, `src/content/services.ts`,
+`src/content/technologies.ts`, `src/content/industries.ts`,
+`src/app/sitemap.ts`, `src/app/robots.ts`,
+`public/images/hero/.gitkeep`, `public/images/logo/.gitkeep`,
+`public/images/tech-icons/.gitkeep`.
+
+**Files modified:** `TASKS.md`, `CHANGELOG.md`, `AI_WORK_LOG.md` (this entry) — documentation
+only; no existing source file (`layout.tsx`, `page.tsx`, `globals.css`, `favicon.ico`,
+config files) was changed.
+
+**Files removed:** None.
+
+**Architectural decisions made:**
+- Assigned the new task ID **T027** rather than renumbering T004–T026 (see point 2 above).
+- Used `.gitkeep` markers for directories that must exist but have no files yet, rather than
+  placeholder component code, per explicit instruction.
+- Content data modules ship with types + empty/minimal exports only; no service, technology,
+  or industry copy was written — reserved for T005.
+- `sitemap.ts`/`robots.ts` were implemented functionally now (not deferred), since they are
+  simple, low-risk Next.js framework conventions rather than "landing-page UI," and having
+  them in place matches "future tasks can be implemented in a clean, predictable
+  architecture." They use a placeholder URL, not a real one.
+- Kept `favicon.ico` in `src/app/` rather than moving it to `public/` per the literal target
+  tree, favoring the correct modern convention over literal tree-matching.
+
+**Validation performed:**
+- `npx tsc --noEmit` — passed with no errors.
+- `npm run lint` — passed with no errors or warnings.
+- `npm run build` — succeeded; new `/robots.txt` and `/sitemap.xml` static routes confirmed
+  in the build output alongside the existing `/` and `/_not-found`.
+- `git status` — confirmed only new files/directories were added (`public/`,
+  `src/app/robots.ts`, `src/app/sitemap.ts`, `src/components/`, `src/content/`, `src/lib/`);
+  no existing tracked file was modified.
+
+**Human review:** Pending.
+
+**Human decisions:** Specified the exact target folder structure and the constraint to
+scaffold structure only, not implementation; specified `.gitkeep`-style minimalism for empty
+folders; specified a prepared (not executed) commit message
+("chore: create base project structure") contingent on a clean implementation.
+
+**Manual work performed by developer:** Not recorded.
+
+**Issues encountered & resolution:**
+1. *Task-ID mismatch* (T004 in the prompt vs. TASKS.md) — resolved by assigning a new stable
+   ID (T027) and disclosing the reasoning, rather than renumbering or silently redefining
+   T004 (see point 2 above).
+2. *Target tree included `favicon.ico` under `public/`*, which conflicts with the existing,
+   correct `src/app/favicon.ico` App Router convention — resolved by keeping the existing
+   file in place and explicitly flagging the deviation rather than silently moving it.
+
+**Result:** T027 completed successfully. The base architecture now exists for later
+component/content/section tasks to build into, with zero UI or content implemented ahead of
+schedule, and all validation passing cleanly.
+
+**Approximate human effort/time:** Not recorded.
+**Approximate AI-assisted effort/time:** Not recorded.
+**Git commit:** None yet (not committed, per instruction — pending human review; prepared
+message: "chore: create base project structure").
