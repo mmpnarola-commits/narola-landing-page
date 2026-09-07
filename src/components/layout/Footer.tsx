@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { Button } from "@/components/ui/Button";
 import { footerContent } from "@/content/footer";
 
 function ClutchIcon({ className = "w-7 h-7" }: { className?: string }) {
@@ -123,7 +124,7 @@ function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
 
 export function Footer() {
   return (
-    <footer id="footer" className="w-full border-t border-slate-100 bg-[#f4f7fb] py-14 md:py-16">
+    <footer id="footer" className="w-full border-t border-slate/10 bg-surface-muted py-14 md:py-16">
       <Container>
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-12 lg:gap-8">
           {/* Column 1: CTA & Ratings (3 cols) */}
@@ -133,18 +134,13 @@ export function Footer() {
             </h3>
 
             <div className="mt-4">
-              <a
-                href={footerContent.cta.buttonHref}
-                className="inline-flex items-center justify-center rounded-md bg-[#0084ff] px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-interactive-blue"
-              >
-                {footerContent.cta.buttonText}
-              </a>
+              <Button href={footerContent.cta.buttonHref}>{footerContent.cta.buttonText}</Button>
             </div>
 
             {/* Ratings Cards */}
             <div className="mt-6 flex flex-col gap-3">
               {/* Clutch Rating */}
-              <div className="flex w-full max-w-[210px] items-center gap-3 rounded-xl border border-gray-200/80 bg-white p-2.5 shadow-xs">
+              <div className="flex w-full max-w-[210px] items-center gap-3 rounded-2xl border border-slate/10 bg-white p-3 shadow-md shadow-slate/5 transition-shadow hover:shadow-lg">
                 <ClutchIcon className="h-8 w-8 shrink-0" />
                 <div className="flex flex-col">
                   <span className="text-[11px] font-medium text-slate">
@@ -164,7 +160,7 @@ export function Footer() {
               </div>
 
               {/* Google Rating */}
-              <div className="flex w-full max-w-[210px] items-center gap-3 rounded-xl border border-gray-200/80 bg-white p-2.5 shadow-xs">
+              <div className="flex w-full max-w-[210px] items-center gap-3 rounded-2xl border border-slate/10 bg-white p-3 shadow-md shadow-slate/5 transition-shadow hover:shadow-lg">
                 <GoogleIcon className="h-8 w-8 shrink-0" />
                 <div className="flex flex-col">
                   <span className="text-[11px] font-medium text-slate">
@@ -286,7 +282,7 @@ export function Footer() {
                   key={social.platform}
                   href={social.href}
                   aria-label={social.label}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#bdc8d4] text-white transition-colors hover:bg-interactive-blue"
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate/30 text-white transition-colors hover:bg-interactive-blue"
                 >
                   {social.platform === "LinkedIn" ? (
                     <LinkedInIcon className="h-3.5 w-3.5" />

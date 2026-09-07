@@ -11,6 +11,43 @@ below as implying otherwise.
 
 ## [Unreleased]
 
+### 2026-09-07 — T029: Modernize UI theme (same color palette)
+#### Changed
+- `src/components/ui/Button.tsx`: primary variant is now a gradient (Interactive Blue →
+  its darker hover shade `#005fb8`) with a soft colored shadow and a subtle hover lift.
+  Both gradient stops individually pass WCAG AA against white text, so this introduces no
+  contrast regression. Radius increased from `rounded-lg` to `rounded-xl`.
+- `src/components/layout/Header.tsx`: sticky header now uses a frosted-glass effect
+  (`backdrop-blur-md` + translucent white) once scrolled, instead of a flat white
+  background with just a shadow. Desktop nav links gained an animated underline on hover.
+  Hamburger button and mobile menu items softened to `rounded-xl` with hover backgrounds.
+- `src/components/sections/CeoMessage.tsx`: added two low-opacity decorative blurred accents
+  (Brand Blue and Accent Orange, both `aria-hidden`, purely visual) and gave the photo
+  container a white card treatment with shadow/ring instead of a bare cropped image.
+
+#### Fixed
+- `src/components/layout/Footer.tsx`: the CTA button had reverted to a solid Brand Blue
+  (`#0084ff`) background with white text — reintroducing the exact ~3.65:1 WCAG AA contrast
+  failure T004 identified and Interactive Blue exists to fix. Replaced with the shared
+  `Button` component (now carrying the new gradient treatment).
+- `src/components/layout/Footer.tsx`: replaced several off-palette arbitrary hex values that
+  were near-duplicates of actual theme tokens — `bg-[#f4f7fb]` → `bg-surface-muted`,
+  `bg-[#bdc8d4]` (social icons) → `bg-slate/30`, `border-slate-100` (Tailwind's own default
+  gray scale, not this project's token) → `border-slate/10`. Rating cards upgraded from
+  `rounded-xl`/`shadow-xs` to `rounded-2xl` with a layered shadow and hover elevation.
+
+#### Notes
+- No new colors were introduced anywhere — every change above uses the same 6 tokens
+  already defined in `globals.css`'s `@theme` block.
+- Validated with `tsc --noEmit`, `npm run lint`, `npm run build` (all clean) and manual
+  browser verification (visual screenshots plus computed-style checks confirming exact
+  token values render correctly).
+- **Flagged, not addressed** (out of scope for a styling-only task): the footer's Clutch
+  4.9 / Google 4.2 rating scores and the CEO message's "20 years of experience" line are
+  exactly the statistics `PRODUCTION_SITE_ANALYSIS.md` §3 identified as unverified and not
+  to reuse without explicit confirmation. These were introduced in the T013 work (built
+  outside this session) and were not touched here — see `AI_WORK_LOG.md`'s T029 entry.
+
 ### 2026-09-07 — T007: Header
 #### Added
 - `src/components/layout/Header.tsx` — the site header: logo (linking home), simplified

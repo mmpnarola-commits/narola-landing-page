@@ -24,8 +24,10 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 h-16 bg-white transition-shadow md:h-[72px] ${
-        isScrolled ? "shadow-sm" : ""
+      className={`sticky top-0 z-50 h-16 transition-all duration-200 md:h-[72px] ${
+        isScrolled
+          ? "bg-white/80 shadow-sm backdrop-blur-md"
+          : "bg-white"
       }`}
     >
       <Container className="flex h-full items-center justify-between">
@@ -48,7 +50,7 @@ export function Header() {
             <a
               key={item.href}
               href={item.href}
-              className="text-button text-ink transition-colors hover:text-interactive-blue"
+              className="relative text-button text-ink transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-0 after:rounded-full after:bg-interactive-blue after:transition-all after:duration-200 hover:text-interactive-blue hover:after:w-full"
             >
               {item.label}
             </a>
@@ -61,7 +63,7 @@ export function Header() {
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-ink md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-ink transition-colors hover:bg-surface-muted md:hidden"
           aria-expanded={isMenuOpen}
           aria-controls="mobile-menu"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -96,13 +98,16 @@ export function Header() {
       </Container>
 
       {isMenuOpen && (
-        <div id="mobile-menu" className="border-t border-surface-muted bg-white md:hidden">
+        <div
+          id="mobile-menu"
+          className="border-t border-surface-muted bg-white shadow-lg md:hidden"
+        >
           <Container className="flex flex-col gap-1 py-4">
             {navItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
-                className="rounded-lg px-2 py-3 text-button text-ink transition-colors hover:bg-surface-muted hover:text-interactive-blue"
+                className="rounded-xl px-3 py-3 text-button text-ink transition-colors hover:bg-surface-muted hover:text-interactive-blue"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}

@@ -1009,4 +1009,153 @@ link styling. The Header is visually and functionally correct at mobile and desk
 
 **Approximate human effort/time:** Not recorded.
 **Approximate AI-assisted effort/time:** Not recorded.
+**Git commit:** `80d5905` for T005/T006/T028, and `1415b67` ("feat: implement core UI
+layout, base styling, and CEO message section, Header & Footer") for T007 — the developer
+committed T007's work bundled together with new T013 work (Footer + CEO Message) built
+outside this session.
+
+---
+
+## T029 — Modernize UI theme (same color palette)
+
+**Date:** 2026-09-07
+
+**Objective:** Refresh the Header, Footer, CeoMessage, and shared Button toward a more
+modern visual treatment, explicitly keeping the same brand color palette (no new colors).
+
+**Human instructions (summary):** "Change the theme with same color with some modern UI." —
+terse, no task ID given (this doesn't correspond to any single existing TASKS.md entry; it's
+a cross-cutting styling refresh of work already built).
+
+**Claude work performed:**
+1. Noticed the working tree had diverged significantly since the last session — a new
+   commit (`1415b67`) had landed T013 (Footer + CEO Message), built outside this session,
+   bundled together with this session's own T007 commit. Read the full current state
+   (`Header.tsx`, `Footer.tsx`, `CeoMessage.tsx`, `globals.css`, `ceoMessage.ts`,
+   `footer.ts`) before touching anything, rather than assuming it matched what this session
+   last left.
+2. **Found and flagged, without unilaterally fixing, a content-policy concern**: the CEO
+   message quotes a named executive verbatim, including "we apply our 20 years of
+   experience..." — one of the exact statistics `PRODUCTION_SITE_ANALYSIS.md` §3 flagged as
+   unverified and not to reuse without explicit confirmation. The footer also displays
+   specific Clutch (4.9) and Google (4.2) rating scores from the same flagged list. Since
+   today's request was scoped to styling, not content, and this content's origin/approval
+   status outside this session is unknown, surfaced this clearly to the human rather than
+   either silently leaving it (would be dishonest by omission, given this project's explicit
+   rules) or silently deleting content the human may have deliberately approved elsewhere.
+3. **Found and did fix, since it was squarely in scope**: the footer's CTA button used a
+   solid Brand Blue (`#0084ff`) background with white text — reintroducing the exact
+   ~3.65:1 WCAG AA contrast failure that T004 identified and Interactive Blue was created
+   to fix in T007. This is a real accessibility regression, and "same colors, more modern"
+   directly licenses using the *correct* existing token instead of a reintroduced bug.
+4. Also found several off-palette arbitrary hex values that were near-duplicates of actual
+   theme tokens (`bg-[#f4f7fb]` vs. the real `--color-surface-muted: #f6f7fa`,
+   `bg-[#bdc8d4]` with no relation to any of the 6 defined tokens, `border-slate-100`
+   referencing Tailwind's own built-in gray scale rather than this project's `slate` token)
+   — replaced all with the correct tokens, since "same colors" means using the actual
+   defined palette consistently, not scattered near-miss approximations of it.
+5. Modernized `Button.tsx`: primary variant changed from a flat fill to a gradient between
+   Interactive Blue and its existing darker hover shade (`#005fb8`, already used in the
+   codebase for the hover state) — deliberately chose these two stops specifically because
+   both individually pass WCAG AA against white text (~4.76:1 and higher), so blending
+   between them introduces no point of contrast failure, unlike a Brand-Blue-involving
+   gradient would. Added a soft colored shadow and hover lift; increased radius to
+   `rounded-xl` for a more contemporary feel.
+6. Modernized `Header.tsx`: sticky header now shows a frosted-glass effect
+   (`backdrop-blur-md` + translucent white) once scrolled, replacing the flat white +
+   shadow-only treatment. Added an animated underline on desktop nav link hover (a
+   `after:` pseudo-element width transition — pure CSS, no JS, automatically respects the
+   global `prefers-reduced-motion` safeguard from T028). Softened the hamburger button and
+   mobile menu item corners to `rounded-xl` with hover backgrounds.
+7. Modernized `Footer.tsx`: replaced the hand-rolled CTA `<a>` with the shared (now
+   gradient) `Button` component instead of duplicating button styling inline — a
+   consolidation opportunity, not just a color fix. Upgraded rating cards from flat
+   `rounded-xl`/`shadow-xs` to `rounded-2xl` with a layered, colored shadow and hover
+   elevation, matching the same "soft depth" language now used elsewhere.
+8. Modernized `CeoMessage.tsx`: added two low-opacity blurred decorative accents (Brand
+   Blue and Accent Orange, both `aria-hidden="true"` since they carry no content) behind the
+   photo, and gave the photo container a white card treatment with padding, shadow, and a
+   subtle ring instead of a bare cropped image sitting directly on the muted background.
+9. **Deliberately did not attempt to override the Button's built-in padding/text-size via a
+   conflicting `className` string** (tried this once for the footer's CTA, then reconsidered
+   before finalizing): Tailwind's compiled CSS order isn't guaranteed to match the order
+   classes appear in a `className` string, so relying on "later string wins" for conflicting
+   utilities is fragile. Used the Button's default size everywhere instead, which is also
+   arguably a better design-system consistency choice.
+10. Ran `tsc`/`lint`/`build` — all clean throughout. Visually verified in-browser (desktop
+    screenshots of the hero-adjacent placeholder, CEO section with decorative accents
+    visible, and the footer's gradient CTA/rating cards) and cross-checked computed styles
+    via JavaScript for the harder-to-screenshot elements (footer background color, CTA
+    button's full class list, social icon background using Tailwind v4's LAB color
+    interpolation for the opacity modifier) — did not rely on screenshots alone, since the
+    Browser pane had intermittent rendering timeouts during this session.
+11. Updated `TASKS.md` (new T029 entry, plus a "flagged for review" note added to the
+    existing T013 entry pointing at this content concern without rewriting T013's own
+    content), `CHANGELOG.md` (new entry), and this file.
+12. Did not touch `src/content/footer.ts` or `src/content/ceoMessage.ts` (the actual
+    flagged content) — styling only. Did not commit or push.
+
+**Files created:** None.
+
+**Files modified:** `src/components/ui/Button.tsx`, `src/components/layout/Header.tsx`,
+`src/components/layout/Footer.tsx`, `src/components/sections/CeoMessage.tsx`, `TASKS.md`,
+`CHANGELOG.md`, `AI_WORK_LOG.md` (this entry).
+
+**Files removed:** None.
+
+**Design/implementation decisions made:**
+- Kept the gradient strictly within two already-AA-passing blues, specifically to rule out
+  reintroducing a contrast bug via the "modern gradient" trend.
+- Fixed the Brand-Blue-button and off-palette-hex issues found along the way, since they
+  were squarely within "same colors" — but did not go looking for or fixing anything beyond
+  what this styling pass actually touched (e.g., did not audit T013's content accuracy,
+  since that's a different kind of concern from what was asked).
+- Reused the shared `Button` component in the footer instead of leaving a second, duplicate
+  button implementation now inconsistent with the new gradient style.
+- Surfaced the CEO-quote/rating-score content concern rather than either fixing or ignoring
+  it unilaterally, since it's a content-policy question outside today's styling scope and
+  outside this session's own prior work.
+
+**Validation performed:**
+- `npx tsc --noEmit` — clean.
+- `npm run lint` — clean, no errors/warnings.
+- `npm run build` — succeeded; no route/behavior regressions.
+- Visual browser verification (desktop viewport) of the placeholder/CEO/footer regions,
+  plus JavaScript computed-style checks for elements affected by intermittent Browser-pane
+  screenshot timeouts during this session (footer background hex, full CTA button class
+  list, social-icon background color).
+
+**Human review:** Pending. In particular: the content-policy flag on the CEO quote's "20
+years" line and the Clutch/Google rating scores — this session did not resolve that, only
+surfaced it.
+
+**Human decisions:** None beyond the single instruction to modernize the theme while
+keeping the same colors.
+
+**Manual work performed by developer:** Not recorded. (Built T013 — Footer and CeoMessage —
+outside this session, prior to this task.)
+
+**Issues encountered & resolution:**
+1. *Working tree had diverged more than expected since the last session* (T013 built
+   externally) — resolved by reading the full current state before making any change,
+   rather than assuming it matched this session's own prior output.
+2. *A real accessibility regression (Brand Blue button) and several off-palette colors were
+   discovered mid-task*, not something this task set out to look for — resolved by fixing
+   them, since "same colors, more modern" directly covers using the correct existing tokens.
+3. *A content-policy concern (verbatim unverified statistics) was discovered but is outside
+   this task's scope and this session's authorship* — resolved by flagging clearly in both
+   TASKS.md and this entry, without unilaterally altering content whose approval status is
+   unknown.
+4. *Browser-pane screenshot timeouts* during verification — resolved by cross-checking via
+   JavaScript computed styles wherever a screenshot didn't render in time, rather than
+   skipping verification for those elements.
+
+**Result:** T029 completed successfully. The Header, Footer, CeoMessage, and shared Button
+now share a cohesive, more modern visual language — gradients, frosted glass, softer
+elevated cards — built entirely from the existing 6-color palette, with two real bugs
+(a contrast regression and several off-palette colors) fixed along the way, and one
+unresolved content-policy concern clearly flagged for the human's decision.
+
+**Approximate human effort/time:** Not recorded.
+**Approximate AI-assisted effort/time:** Not recorded.
 **Git commit:** None yet (not committed, per instruction — pending human review).

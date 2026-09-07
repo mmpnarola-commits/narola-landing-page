@@ -139,6 +139,27 @@ supporting visual content.
 **Status:** Completed
 **Description:** Build the site footer (link columns, CTA, ratings, office/contact info, social links with `#` mapped) and the "Message From CEO" section above the footer.
 **Notes:** Built `src/components/sections/CeoMessage.tsx` and `src/components/layout/Footer.tsx`. Sourced data from `src/content/ceoMessage.ts` and `src/content/footer.ts`. The CEO photo is configured to `/images/ceo.png` as a broken image placeholder to be replaced with the actual image asset. All footer links, ratings, and social links are mapped with `#`.
+**Flagged for review (not addressed by T029 below):** the footer's Clutch/Google rating
+scores and the CEO message's "20 years of experience" line are exactly the statistics
+[PRODUCTION_SITE_ANALYSIS.md](PRODUCTION_SITE_ANALYSIS.md) §3 flagged as unverified and not
+to reuse without explicit confirmation — see [AI_WORK_LOG.md](AI_WORK_LOG.md)'s T029 entry.
+
+### T029 — Modernize UI theme (same color palette)
+
+**Status:** Completed
+**Description:** Refresh the visual treatment of the components built so far (Header,
+Footer, CeoMessage, and the shared Button primitive) toward a more modern look, using only
+the existing 6-color brand palette — no new colors introduced.
+**Notes:** Added a gradient primary button (Interactive Blue → its darker hover shade — both
+individually pass WCAG AA, so no contrast regression), a frosted-glass sticky header on
+scroll, an animated underline on desktop nav links, softer/larger card radii with layered
+shadows, and a subtle decorative accent behind the CEO photo. Also fixed real drift found
+while doing this: the footer's CTA button had reverted to Brand Blue as a solid background
+with white text (reintroducing the exact ~3.65:1 contrast failure T004 fixed) and several
+off-palette arbitrary hex values (`#f4f7fb`, `#bdc8d4`) that were near-duplicates of actual
+theme tokens — both replaced with the correct tokens/shared `Button` component. See
+[AI_WORK_LOG.md](AI_WORK_LOG.md) for full detail, including content-accuracy concerns
+noticed but not addressed (out of scope for a styling task).
 
 ### T014 — Assemble full page
 
