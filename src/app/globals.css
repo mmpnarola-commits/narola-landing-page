@@ -52,24 +52,31 @@
   color-scheme: light;
 }
 
-body {
-  background-color: #fff;
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-}
+/* Base-layer element defaults, not bare unlayered rules: Tailwind's cascade layers put
+   unlayered CSS ahead of ALL layers regardless of specificity, which would make these
+   defaults un-overridable by any component utility class (e.g. a component's `text-ink`
+   couldn't ever beat a bare `a { color }` rule). `@layer base` keeps these as genuine
+   defaults that `@layer utilities` (Tailwind's own utility classes) can still override. */
+@layer base {
+  body {
+    background-color: #fff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
 
-a {
-  color: var(--color-interactive-blue);
-  text-underline-offset: 2px;
-}
+  a {
+    color: var(--color-interactive-blue);
+    text-underline-offset: 2px;
+  }
 
-a:hover {
-  text-decoration-thickness: 2px;
-}
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
 
-:focus-visible {
-  outline: 2px solid var(--color-interactive-blue);
-  outline-offset: 2px;
+  :focus-visible {
+    outline: 2px solid var(--color-interactive-blue);
+    outline-offset: 2px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

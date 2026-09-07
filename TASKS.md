@@ -97,8 +97,16 @@ new asset paths. See [CHANGELOG.md](CHANGELOG.md) for the full file list.
 
 ### T007 — Header
 
-**Status:** Not Started
+**Status:** Completed
 **Description:** Build the site header: logo, navigation, primary CTA, responsive/mobile nav.
+**Notes:** Built `src/components/layout/Header.tsx` per VISUAL_DIRECTION.md §5 — sticky
+header, simplified in-page anchor nav, primary CTA, hamburger + full-width mobile panel,
+scroll-triggered shadow. Also created two reusable primitives it needed:
+`src/components/ui/{Button,Container}.tsx`. Temporarily wired into `src/app/page.tsx` so it
+could be visually verified (T014 will do the final full-page assembly). Found and fixed a
+real bug in `globals.css` while testing: base styles weren't wrapped in `@layer base`, so
+they unconditionally beat any component utility class regardless of specificity — see
+[AI_WORK_LOG.md](AI_WORK_LOG.md) for detail.
 
 ### T008 — Hero section
 
@@ -126,10 +134,11 @@ supporting visual content.
 **Status:** Not Started
 **Description:** Build "Industries We Specialize In" section.
 
-### T013 — Footer
+### T013 — Footer & CEO Message Section
 
-**Status:** Not Started
-**Description:** Build the site footer: link columns, office/contact info, legal links.
+**Status:** Completed
+**Description:** Build the site footer (link columns, CTA, ratings, office/contact info, social links with `#` mapped) and the "Message From CEO" section above the footer.
+**Notes:** Built `src/components/sections/CeoMessage.tsx` and `src/components/layout/Footer.tsx`. Sourced data from `src/content/ceoMessage.ts` and `src/content/footer.ts`. The CEO photo is configured to `/images/ceo.png` as a broken image placeholder to be replaced with the actual image asset. All footer links, ratings, and social links are mapped with `#`.
 
 ### T014 — Assemble full page
 

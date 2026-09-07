@@ -11,6 +11,39 @@ below as implying otherwise.
 
 ## [Unreleased]
 
+### 2026-09-07 — T007: Header
+#### Added
+- `src/components/layout/Header.tsx` — the site header: logo (linking home), simplified
+  in-page anchor navigation (Services/Technologies/Industries), primary CTA, hamburger menu
+  with a full-width mobile panel (same links + CTA), and a scroll-triggered shadow. Sticky
+  positioned, 64px mobile / 72px desktop, per VISUAL_DIRECTION.md §5.
+- `src/components/ui/Button.tsx` — reusable primary/secondary button, using Interactive Blue
+  (not Brand Blue) specifically to satisfy the WCAG AA contrast fix from VISUAL_DIRECTION.md
+  §2/T004.
+- `src/components/ui/Container.tsx` — reusable 1280px max-width wrapper with responsive
+  horizontal padding, per VISUAL_DIRECTION.md §4.
+
+#### Fixed
+- `src/app/globals.css`: wrapped the base element defaults (`body`, `a`, `a:hover`,
+  `:focus-visible`) in `@layer base`. They were previously unlayered CSS, which — per
+  Tailwind v4's cascade-layer rules — gave them unconditional priority over *any* Tailwind
+  utility class regardless of specificity. This silently broke any component's ability to
+  override the default link color (discovered while visually testing the Header's mobile
+  nav links, which rendered blue instead of the intended Ink color even with an explicit
+  `text-ink` class). No visual change to already-correct pages; this only affects
+  components that explicitly override these defaults, like the new Header.
+
+#### Changed
+- `src/app/page.tsx`: temporarily renders `<Header />` above the placeholder content so it
+  could be visually verified in a browser. Full page assembly/ordering is still T014's job.
+
+#### Notes
+- Validated with `tsc --noEmit`, `npm run lint`, `npm run build` (all clean) and manual
+  browser verification at mobile and desktop widths, including exercising the mobile menu
+  toggle and confirming computed colors match the design tokens.
+- The primary CTA still points at the placeholder `#footer` anchor from T005 — unresolved
+  until the footer exists (T013) and/or the real CTA destination is decided.
+
 ### 2026-09-07 — T006: Finalize assets
 #### Added
 - `public/images/logo/narola-infotech-logo.svg` — official brand logo, sourced directly

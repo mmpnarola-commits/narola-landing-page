@@ -862,4 +862,151 @@ narrowed and documented rather than filled with risky approximations.
 
 **Approximate human effort/time:** Not recorded.
 **Approximate AI-assisted effort/time:** Not recorded.
+**Git commit:** `80d5905` ("feat: finalize site content, branding assets, and global
+typography tokens" — T028/T005/T006 committed together by the developer).
+
+---
+
+## T007 — Header
+
+**Date:** 2026-09-07
+
+**Objective:** Build the site header component (logo, navigation, primary CTA, responsive/
+mobile nav) per VISUAL_DIRECTION.md §5 and TASKS.md's T007 definition — the first actual UI
+component built in this project.
+
+**Human instructions (summary):** A single terse instruction — "T007 — Header" — matching
+TASKS.md's actual T007 definition exactly, no ID mismatch.
+
+**Claude work performed:**
+1. Confirmed via `git log`/`git status` that the prior T028/T005/T006 work had been
+   committed (`80d5905`) since the last session, and verified via `git ls-tree` that the
+   committed tree exactly matched what was intended (a `git show --stat` quirk briefly made
+   it look like two already-removed `.gitkeep` files had been re-added; `ls-tree` confirmed
+   they hadn't — false alarm).
+2. Read TASKS.md fresh, confirmed T006 complete and T007 was next with no ID mismatch, then
+   read VISUAL_DIRECTION.md §5 (Header direction) and the current `navigation.ts`/
+   `siteConfig.ts` content in full before writing any component code.
+3. Identified that Header genuinely needs two reusable primitives — a max-width `Container`
+   and a `Button` with the Interactive Blue contrast fix baked in — and built both now
+   rather than duplicating that styling inline, since both are directly required by Header's
+   own scope (not scope creep into other sections' work).
+4. Built `Container.tsx` (Server Component, 1280px max-width, responsive padding, per
+   VISUAL_DIRECTION.md §4) and `Button.tsx` (Server Component, primary/secondary variants,
+   using Interactive Blue per the T004 accessibility fix, careful not to override the global
+   `:focus-visible` style).
+5. Built `Header.tsx` as a Client Component (`"use client"` — required for the mobile-menu
+   toggle state and a scroll-position listener for the shadow effect): sticky positioning,
+   64px/72px responsive height, logo linking home, simplified anchor nav (hidden below
+   `md:`), desktop CTA, a hamburger button with proper `aria-expanded`/`aria-controls`/
+   `aria-label`, and a conditionally-rendered full-width mobile panel repeating the nav
+   links plus the CTA. Reduced-motion handling needed no extra code here — the global
+   `prefers-reduced-motion` safeguard from T028 already covers the `transition-colors`/
+   `transition-shadow` utilities used.
+6. **Discovered mid-implementation that Next.js blocks SVGs in `next/image` by default**
+   (a security restriction, opt-out via `next.config.ts`). Rather than modify project-wide
+   image config for two vector assets, switched the logo to a plain `<img>` — also the more
+   correct choice technically, since vector graphics gain nothing from `next/image`'s raster
+   optimization pipeline.
+7. **Discovered mid-implementation that `href="/"` (an actual internal route, unlike the
+   hash-anchor nav links) triggers Next's `@next/next/no-html-link-for-pages` lint rule.**
+   Fixed by using `next/link` for just that one case, keeping plain `<a>` for every hash
+   anchor (there are no other real routes in this single-page project, so `Link` would add
+   nothing there).
+8. Wired `<Header />` into `page.tsx` (temporarily, alongside the existing placeholder) —
+   necessary to actually render and test it, since T014 (full page assembly) hasn't happened
+   yet and CLAUDE.md requires verifying UI changes in a browser before reporting done.
+9. Ran `tsc`/`lint`/`build` — all clean after the two fixes above — then visually verified
+   in a browser at both mobile (375px) and desktop widths.
+10. **Found a real, previously-invisible bug while testing**: the mobile nav links rendered
+    in Interactive Blue instead of the intended Dark Ink, despite an explicit `text-ink`
+    Tailwind class. Diagnosed rather than working around it: `globals.css`'s `body`/`a`/
+    `a:hover`/`:focus-visible` rules (written in T028) were plain unlayered CSS, and
+    Tailwind v4's cascade-layer system gives unlayered rules unconditional priority over
+    *any* utility class regardless of specificity — so `.text-ink` could never have beaten
+    a bare `a { color }` rule, in any component, ever, until this was fixed. Wrapped those
+    rules in `@layer base` so Tailwind's own `@layer utilities` (which comes later in the
+    layer order) can correctly override them, matching standard Tailwind convention for
+    exactly this kind of global default.
+11. Re-ran full validation after the fix (`tsc`/`lint`/`build`, all clean) and re-verified
+    in-browser via computed styles that nav links now correctly render Dark Ink
+    (`rgb(25, 39, 52)`) by default.
+12. Verified the mobile menu toggle's actual behavior via both a real click and a
+    JS-dispatched click (a Browser-pane rendering hiccup interfered with screenshotting the
+    live click at one point): `aria-expanded`/label update correctly, and the panel renders
+    exactly the 4 expected items (3 nav links + CTA).
+13. **Observed persistent console errors** (`net::ERR_CONNECTION_RESET`, RSC payload fetch
+    failures, an "Failed to construct 'Image'" error) on the shared, long-running external
+    dev server (not one this session started or controls — Next.js 16 enforces a
+    project-level single-dev-server lock, so a second isolated instance couldn't be started
+    to rule this out cleanly). Treated this as likely dev-environment noise rather than a
+    real defect: the errors were identical before and after an unrelated CSS fix and on
+    unrelated pages/viewports, the production build was completely clean, and every visual/
+    interactive check passed — but disclosed this plainly rather than hiding it.
+14. Removed the now-redundant `.gitkeep` markers from `src/components/{layout,ui}/` now
+    that real files exist in those folders.
+15. Updated `TASKS.md` (T007 → Completed), `CHANGELOG.md` (new entry, including the bug
+    fix), and this file.
+16. Did not build Hero, Core/Other Services, Technologies, Industries, or Footer. Did not
+    add any dependency. Did not commit or push.
+
+**Files created:** `src/components/layout/Header.tsx`, `src/components/ui/Button.tsx`,
+`src/components/ui/Container.tsx`.
+
+**Files modified:** `src/app/globals.css` (the `@layer base` bug fix), `src/app/page.tsx`
+(temporarily renders `<Header />`), `TASKS.md`, `CHANGELOG.md`, `AI_WORK_LOG.md` (this entry).
+
+**Files removed:** `src/components/layout/.gitkeep`, `src/components/ui/.gitkeep`
+(redundant once real files existed in those folders).
+
+**Architectural/implementation decisions made:**
+- Built `Button`/`Container` now, scoped strictly to what Header needs, rather than either
+  duplicating the styling inline or building the full `ui/` primitive set speculatively.
+- Plain `<a>` for hash anchors, `next/link` only for the one real internal route (the logo).
+- Plain `<img>` for the SVG logo instead of `next/image`, to avoid a project-wide config
+  change for an asset type that gains nothing from raster optimization.
+- Wired Header into `page.tsx` now (ahead of formal T014 assembly) since a component that
+  has never been rendered can't actually be verified — treated as a necessary means to
+  validate this task, not as pre-empting T014's job of finalizing section order.
+
+**Validation performed:**
+- `npx tsc --noEmit` — clean (both before and after the globals.css fix).
+- `npm run lint` — one real error caught and fixed (`no-html-link-for-pages` on the logo
+  link); clean after the fix.
+- `npm run build` — succeeded both times; no route/behavior regressions.
+- Manual browser verification at mobile (375px) and desktop widths: visual screenshots,
+  computed-style checks (colors, font), and functional exercise of the mobile menu toggle
+  (both real and JS-dispatched clicks, confirming `aria-expanded`, label text, and panel
+  contents all update correctly).
+- Explicitly re-tested after the `@layer base` fix to confirm the regression was actually
+  resolved, not just patched superficially.
+
+**Human review:** Pending. Worth a look: the temporary `page.tsx` wiring (fine as an interim
+state, per Note above), and the unresolved dev-server console errors noted in point 13
+(believed to be environmental, not code-related, but not something this session could fully
+rule out given the single-dev-server-instance constraint).
+
+**Human decisions:** None beyond the single instruction to proceed with T007 as defined.
+
+**Manual work performed by developer:** Not recorded.
+
+**Issues encountered & resolution:**
+1. *`next/image` blocks SVGs by default* — resolved by using a plain `<img>` for the logo
+   instead of changing project-wide image config.
+2. *`no-html-link-for-pages` lint error on the logo's `href="/"`* — resolved by using
+   `next/link` for that one internal-route case only.
+3. *Real cascade-layer bug in `globals.css`*, discovered only through actual browser
+   testing (not caught by `tsc`/`lint`/`build`, which have no way to detect a CSS
+   specificity/layering issue) — resolved by wrapping the affected rules in `@layer base`,
+   and re-verified the fix in-browser rather than assuming it worked.
+4. *Persistent dev-server console errors*, not reproducible via production build or isolated
+   from the shared external dev-server process — documented as likely environmental rather
+   than silently ignored or falsely presented as fully resolved.
+
+**Result:** T007 completed successfully, including catching and fixing a real, previously
+latent bug that would have affected every future component's ability to override default
+link styling. The Header is visually and functionally correct at mobile and desktop widths.
+
+**Approximate human effort/time:** Not recorded.
+**Approximate AI-assisted effort/time:** Not recorded.
 **Git commit:** None yet (not committed, per instruction — pending human review).

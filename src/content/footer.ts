@@ -1,29 +1,121 @@
+export interface FooterLink {
+  label: string;
+  href: string;
+}
+
+export interface FooterLinkColumn {
+  title: string;
+  links: FooterLink[];
+}
+
 export interface OfficeLocation {
+  country: "US" | "IN";
   city: string;
   address: string;
 }
 
-// Factual office/contact information from PRODUCTION_SITE_ANALYSIS.md §1 (production
-// site's footer) — addresses are contact facts, not marketing claims, so they're reused
-// directly rather than paraphrased.
-export const officeLocations: OfficeLocation[] = [
-  { city: "North Carolina", address: "167 E Chatham St Suite 300, Cary, NC 27511" },
-  { city: "Virginia", address: "43519 Wheadon Ter, Chantilly VA 20152" },
-  {
-    city: "Surat",
-    address: "5th Floor, Unity Corner, TP 10 Main Road, Pal, Surat 395009",
-  },
-  {
-    city: "Nashik",
-    address: "2nd Floor, Pawar Business Square, Pathardi Phata, Nashik 422010",
-  },
-];
+export interface RatingItem {
+  platform: "Clutch" | "Google";
+  label: string;
+  score: string;
+  stars: number;
+}
 
-// Footer "Services"/"Technologies" link columns should be composed by the footer
-// component directly from `coreServices`/`otherServices` (services.ts) and
-// `technologyCategories` (technologies.ts) rather than duplicated here.
-//
-// Legal links (Privacy Policy, Terms & Conditions) are intentionally omitted: this
-// project has no such pages in its v1 scope, and linking out to the production
-// WordPress site's versions would reintroduce a coupling this project is meant to avoid.
-// Add real links here once/if those pages exist.
+export interface SocialLink {
+  platform: "LinkedIn" | "Instagram";
+  label: string;
+  href: string;
+}
+
+export const footerContent = {
+  cta: {
+    heading: "Want to talk about your project ?",
+    buttonText: "Schedule A Call",
+    buttonHref: "#",
+  },
+  ratings: [
+    {
+      platform: "Clutch" as const,
+      label: "Clutch rating",
+      score: "4.9",
+      stars: 5,
+    },
+    {
+      platform: "Google" as const,
+      label: "Google rating",
+      score: "4.2",
+      stars: 5,
+    },
+  ],
+  services: [
+    { label: "Custom Software Development", href: "#" },
+    { label: "Software Product Engineering", href: "#" },
+    { label: "Software Modernization", href: "#" },
+    { label: "Software Maintenance and Support", href: "#" },
+    { label: "Ecommerce Software Development", href: "#" },
+    { label: "Staff Augmentation", href: "#" },
+    { label: "Cloud Transformation Services", href: "#" },
+  ],
+  technologies: [
+    { label: "ReactJS", href: "#" },
+    { label: "AngularJS", href: "#" },
+    { label: "NodeJS", href: "#" },
+    { label: "PHP", href: "#" },
+    { label: "Dot NET", href: "#" },
+    { label: "JAVA", href: "#" },
+    { label: "WordPress", href: "#" },
+    { label: "CodeIgniter", href: "#" },
+    { label: "Laravel", href: "#" },
+    { label: "Android", href: "#" },
+    { label: "iOS", href: "#" },
+    { label: "React Native", href: "#" },
+    { label: "Flutter", href: "#" },
+  ],
+  resources: [
+    { label: "Our Story", href: "#" },
+    { label: "Case Studies", href: "#" },
+    { label: "Blogs", href: "#" },
+    { label: "Agile Methodologies", href: "#" },
+    { label: "Engagement Models", href: "#" },
+  ],
+  globalPresence: {
+    title: "Global Presence",
+    offices: [
+      {
+        country: "US" as const,
+        city: "North Carolina",
+        address: "187 E Chatham St Suite 300, Cary, NC 27511",
+      },
+      {
+        country: "US" as const,
+        city: "Virginia",
+        address: "43519 Wheadon Ter, Chantilly VA 20152",
+      },
+    ],
+    devCentersTitle: "Development Centers",
+    devCenters: [
+      {
+        country: "IN" as const,
+        city: "Surat",
+        address: "5th Floor, Unity Corner, TP 10 Main Road, Pal, Surat 395009",
+      },
+      {
+        country: "IN" as const,
+        city: "Nashik",
+        address: "2nd Floor, Pawar Business Square, Pathardi Phata, Nashik 422010",
+      },
+    ],
+  },
+  socialLinks: [
+    {
+      platform: "LinkedIn" as const,
+      label: "LinkedIn",
+      href: "#",
+    },
+    {
+      platform: "Instagram" as const,
+      label: "Instagram",
+      href: "#",
+    },
+  ],
+};
