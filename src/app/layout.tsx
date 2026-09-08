@@ -9,8 +9,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Narola Infotech — Landing Page",
+  title: "Agile Software Development company USA | Top 1% developers ",
   description: "Narola Infotech landing page (in development).",
+  icons: {
+    icon: "/images/favicon.png",
+    shortcut: "/images/favicon.png",
+    apple: "/images/favicon.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

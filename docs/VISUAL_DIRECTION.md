@@ -5,7 +5,7 @@ page. This document is the reference for all future implementation tasks (T007 o
 no landing-page components are implemented here; this is documentation only.
 
 **Inputs:** [PRODUCTION_SITE_ANALYSIS.md](PRODUCTION_SITE_ANALYSIS.md) (brand reference, not
-something to copy), [CLAUDE.md](CLAUDE.md) (project rules), and the project's existing
+something to copy), [CLAUDE.md](../CLAUDE.md) (project rules), and the project's existing
 Next.js 16 + TypeScript + Tailwind CSS 4 (`src/app/globals.css` CSS-first `@theme` setup).
 
 **How to read this document:** every color/contrast figure is **computed** (WCAG 2.1

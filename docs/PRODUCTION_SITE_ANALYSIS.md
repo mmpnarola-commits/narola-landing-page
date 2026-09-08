@@ -9,7 +9,7 @@ site visitor's browser would see it.
 
 **Purpose:** Reference for building the new, independent Narola Infotech landing page. This
 file is the design/content reference for later tasks (T004 onward) so the analysis doesn't
-need to be repeated. Per [CLAUDE.md](CLAUDE.md), the production site is a *reference only* —
+need to be repeated. Per [CLAUDE.md](../CLAUDE.md), the production site is a *reference only* —
 no WordPress markup, CSS, or code is to be copied, and the WordPress site itself is never
 modified.
 
@@ -140,7 +140,7 @@ something we are inventing):
   development centers) — full addresses are on the live site's footer
 
 **Explicitly flagged — do NOT reuse without independent confirmation, per
-[CLAUDE.md](CLAUDE.md)'s "do not invent claims" rule:** statistics ("1500+ happy clients",
+[CLAUDE.md](../CLAUDE.md)'s "do not invent claims" rule:** statistics ("1500+ happy clients",
 "3000+ successful projects", "20+ years", "350+ professionals", "50+ countries", "13+
 awards"), named client case studies (TagSom, Biocon, Epal) and their metrics, named client
 logos (CGI, L&T, TVS Next, Infosys, Biocon), third-party review scores (Clutch 4.9, Google
@@ -177,7 +177,7 @@ plus a catch-all "And Beyond" link.
 "navigation" is realistically just in-page anchor links to our own sections (Services,
 Technologies, Industries) plus the primary CTA — there is no need to replicate the full
 mega-menu or link out to WordPress sub-pages, since this project is intentionally decoupled
-from the WordPress site (see [CLAUDE.md](CLAUDE.md)).
+from the WordPress site (see [CLAUDE.md](../CLAUDE.md)).
 
 ---
 

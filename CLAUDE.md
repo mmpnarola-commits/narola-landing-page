@@ -23,7 +23,7 @@ This repository contains a **separate, standalone landing page for Narola Infote
 - npm (package manager for this project — do not introduce yarn/pnpm/bun lockfiles)
 - `src/` directory layout, `@/*` import alias
 
-See [CHANGELOG.md](CHANGELOG.md) for exact installed versions at each milestone.
+See [CHANGELOG.md](docs/CHANGELOG.md) for exact installed versions at each milestone.
 
 ## Development Rules
 
@@ -72,16 +72,16 @@ Every task should follow this sequence:
 4. **Implement** — make the change, scoped to the task at hand.
 5. **Validate** — run lint/build/dev checks relevant to the change.
 6. **Review** — check the diff before considering the task done.
-7. **Update documentation** — TASKS.md / CHANGELOG.md / AI_WORK_LOG.md as described below.
+7. **Update documentation** — docs/TASKS.md / docs/CHANGELOG.md / docs/AI_WORK_LOG.md as described below.
 8. **Commit** — only when explicitly requested by the user.
 
 Before making large or structurally significant changes, explain the intended approach and
 get confirmation rather than proceeding silently.
 
 After completing a task:
-- Update [TASKS.md](TASKS.md) with the task's status.
-- Update [CHANGELOG.md](CHANGELOG.md) when the change is user-facing or milestone-worthy.
-- Update [AI_WORK_LOG.md](AI_WORK_LOG.md) with what was done.
+- Update [TASKS.md](docs/TASKS.md) with the task's status.
+- Update [CHANGELOG.md](docs/CHANGELOG.md) when the change is user-facing or milestone-worthy.
+- Update [AI_WORK_LOG.md](docs/AI_WORK_LOG.md) with what was done.
 - Report: files changed, validation performed, and any decisions or issues encountered.
 
 ## Git Rules
